@@ -1,0 +1,89 @@
+#!/usr/bin/env bash
+# pre-commit — механизм, а не просьба.
+#
+# Блокирует коммит, если в изменения попало похожее на секреты либо файлы
+# материалов курса. Тесты хук НЕ гоняет: красные тесты в этом проекте
+# бывают намеренными, блокировать на них коммит неправильно.
+#
+# Включается: git config core.hooksPath .githooks
+#
+# Значения совпадений намеренно НЕ выводятся: хук, печатающий найденный
+# секрет в терминал и в лог CI, сам становится каналом утечки.
+
+set -u
+
+RULE_MATERIALS="материалы курса"
+RULE_SECRETFILE="файл, который обычно содержит секреты"
+RULE_ASSIGN="присваивание ключа, токена или пароля"
+RULE_PRIVKEY="блок приватного ключа"
+RULE_VENDOR="токен известного формата"
+
+findings=""
+add() { findings="${findings}  ${1} — ${2}"$'\n'; }
+
+# ВАЖНО: только -z. Без него git печатает имена с не-ASCII символами
+# в кавычках и восьмеричных escape-последовательностях
+# ("04 \302\267 \320\224..."), и сравнение по имени молча не срабатывает.
+# Ровно на этом первая версия хука пропустила материалы курса.
+while IFS= read -r -d $'\0' f; do
+  [ -z "$f" ] && continue
+  base="${f##*/}"
+
+  # --- 1. запрещённые файлы по имени ---
+  case "$base" in
+    "04 · "*|"05 · "*)      add "$f" "$RULE_MATERIALS"; continue ;;
+  esac
+  case "$base" in
+    .env|.env.local|.env.production|.env.development)
+                            add "$f" "$RULE_SECRETFILE"; continue ;;
+    settings.json|id_rsa|id_ed25519|id_dsa|*.pem|*.p12|*.pfx|*.keystore)
+                            add "$f" "$RULE_SECRETFILE"; continue ;;
+  esac
+
+  # --- 2. содержимое добавленных строк ---
+  # Сам каталог хука пропускаем: в нём образцы лежат по назначению.
+  case "$f" in
+    .githooks/*) continue ;;
+  esac
+
+  added="$(git diff --cached -U0 -- "$f" | sed -n 's/^+//p' | sed '/^++ /d')"
+  [ -z "$added" ] && continue
+
+  if printf '%s' "$added" | grep -Eq '(API_KEY|APIKEY|API-KEY|SECRET_KEY|CLIENT_SECRET|ACCESS_KEY|AWS_SECRET_ACCESS_KEY|AUTH_TOKEN|TOKEN|PASSWORD|PASSWD|PRIVATE_KEY)[[:space:]]*[:=][[:space:]]*[A-Za-z0-9_+/.-]{4,}'; then
+    add "$f" "$RULE_ASSIGN"
+  fi
+  if printf '%s' "$added" | grep -Eq -- '-----BEGIN [A-Z ]*PRIVATE KEY-----'; then
+    add "$f" "$RULE_PRIVKEY"
+  fi
+  if printf '%s' "$added" | grep -Eq '(gh[pousr]_[A-Za-z0-9]{20,}|sk-[A-Za-z0-9]{20,}|xox[baprs]-[A-Za-z0-9-]{10,})'; then
+    add "$f" "$RULE_VENDOR"
+  fi
+done < <(git diff --cached --name-only --diff-filter=ACM -z)
+
+if [ -n "$findings" ]; then
+  {
+    echo "=============================================================="
+    echo "ОТКАЗ. Коммит заблокирован хуком .githooks/pre-commit"
+    echo "=============================================================="
+    echo
+    echo "Найдено в проиндексированных изменениях:"
+    echo
+    printf '%s' "$findings"
+    echo "Значения совпадений не выводятся намеренно: хук, печатающий"
+    echo "секрет в терминал, сам становится каналом утечки."
+    echo
+    echo "Что делать:"
+    echo "  1. Убрать файл из индекса:   git reset HEAD <файл>"
+    echo "  2. Заменить значение плейсхолдером или внести файл в .gitignore."
+    echo "  3. Материалы курса в сдачу не входят — они уже в .gitignore;"
+    echo "     если файл попал в индекс, он был добавлен принудительно."
+    echo
+    echo "Это механизм, а не просьба: сменой формулировки команды он"
+    echo "не обходится. Осознанный обход — git commit --no-verify;"
+    echo "он виден в истории действий и требует отдельного решения."
+    echo "=============================================================="
+  } >&2
+  exit 1
+fi
+
+exit 0

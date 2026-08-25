@@ -35,3 +35,12 @@ test-results/
 *.tmp
 .DS_Store
 Thumbs.db
+
+# демонстрация работы pre-commit хука: содержит строку-образец
+evidence/hook-demo.txt
+
+# служебная папка переноса приложения из контейнера
+_transfer/
+
+# файл данных приложения
+app/data.json
