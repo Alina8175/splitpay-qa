@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SplitPay — общие расходы</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💸</text></svg>">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<div id="toast" class="toast" hidden></div>
+
+<!-- ================= AUTH ================= -->
+<section id="view-auth" class="auth-wrap" hidden>
+  <div class="auth-card">
+    <div class="brand"><span class="brand-mark">₽</span> SplitPay</div>
+    <p class="brand-sub">Совместный учёт общих расходов</p>
+
+    <div class="tabs tabs-auth">
+      <button class="tab active" data-auth-tab="login">Вход</button>
+      <button class="tab" data-auth-tab="register">Регистрация</button>
+    </div>
+
+    <form id="form-login" class="stack">
+      <label>Email<input type="email" name="email" required autocomplete="email" placeholder="anna@example.com"></label>
+      <label>Пароль<input type="password" name="password" required autocomplete="current-password" placeholder="••••••"></label>
+      <button class="btn btn-primary" type="submit">Войти</button>
+    </form>
+
+    <form id="form-register" class="stack" hidden>
+      <label>Имя<input name="name" required maxlength="60" placeholder="Анна"></label>
+      <label>Email<input type="email" name="email" required autocomplete="email" placeholder="anna@example.com"></label>
+      <label>Пароль<input type="password" name="password" required minlength="6" autocomplete="new-password" placeholder="минимум 6 символов"></label>
+      <button class="btn btn-primary" type="submit">Создать аккаунт</button>
+    </form>
+  </div>
+</section>
+
+<!-- ================= APP ================= -->
+<div id="view-app" hidden>
+  <header class="topbar">
+    <button class="brand brand-btn" id="btn-home"><span class="brand-mark">₽</span> SplitPay</button>
+    <div class="topbar-right">
+      <span id="who" class="who"></span>
+      <button class="btn btn-ghost" id="btn-logout">Выйти</button>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- ---------- groups list ---------- -->
+    <section id="screen-groups" hidden>
+      <div class="row-between">
+        <h1>Мои группы</h1>
+        <button class="btn btn-primary" id="btn-new-group">+ Новая группа</button>
+      </div>
+      <div id="groups-list" class="cards"></div>
+      <p id="groups-empty" class="empty" hidden>Пока нет ни одной группы. Создайте первую — например «Поездка в Сочи».</p>
+    </section>
+
+    <!-- ---------- group detail ---------- -->
+    <section id="screen-group" hidden>
+      <button class="btn btn-ghost btn-back" id="btn-back">← Все группы</button>
+      <div class="row-between group-head">
+        <div>
+          <h1 id="group-name"></h1>
+          <p id="group-meta" class="muted"></p>
+        </div>
+        <div class="head-actions">
+          <button class="btn btn-primary" id="btn-add-expense">+ Расход</button>
+          <button class="btn btn-ghost" id="btn-delete-group" title="Удалить группу">Удалить группу</button>
+        </div>
+      </div>
+
+      <div id="my-summary" class="summary"></div>
+
+      <div class="tabs">
+        <button class="tab active" data-tab="expenses">Расходы</button>
+        <button class="tab" data-tab="debts">Долги</button>
+        <button class="tab" data-tab="members">Участники</button>
+        <button class="tab" data-tab="history">История</button>
+      </div>
+
+      <div id="tab-expenses" class="tab-panel">
+        <div class="filters">
+          <select id="filter-category"><option value="">Все категории</option></select>
+          <select id="filter-payer"><option value="">Все плательщики</option></select>
+        </div>
+        <div id="expenses-list" class="list"></div>
+      </div>
+
+      <div id="tab-debts" class="tab-panel" hidden>
+        <div id="debts-body"></div>
+      </div>
+
+      <div id="tab-members" class="tab-panel" hidden>
+        <form id="form-add-member" class="inline-form">
+          <input name="email" type="email" required placeholder="email участника" >
+          <button class="btn btn-primary" type="submit">Добавить</button>
+        </form>
+        <div id="members-list" class="list"></div>
+      </div>
+
+      <div id="tab-history" class="tab-panel" hidden>
+        <div id="history-list" class="timeline"></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ================= MODALS ================= -->
+<div id="modal-backdrop" class="backdrop" hidden></div>
+
+<div id="modal-group" class="modal" hidden>
+  <h2>Новая группа</h2>
+  <form id="form-group" class="stack">
+    <label>Название<input name="name" required maxlength="80" placeholder="Поездка в Сочи"></label>
+    <label>Описание<input name="description" maxlength="300" placeholder="необязательно"></label>
+    <label>Валюта по умолчанию<input name="currency" value="RUB" maxlength="3" placeholder="RUB"></label>
+    <label>Участники (email через запятую)<input name="memberEmails" placeholder="ivan@example.com, olga@example.com"></label>
+    <p class="hint">Добавлять можно только уже зарегистрированных пользователей.</p>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-ghost" data-close>Отмена</button>
+      <button type="submit" class="btn btn-primary">Создать</button>
+    </div>
+  </form>
+</div>
+
+<div id="modal-expense" class="modal modal-wide" hidden>
+  <h2 id="expense-modal-title">Новый расход</h2>
+  <form id="form-expense" class="stack">
+    <div class="grid-2">
+      <label>Описание<input name="description" required maxlength="160" placeholder="Ужин в кафе"></label>
+      <label>Категория<select name="category"></select></label>
+    </div>
+    <div class="grid-3">
+      <label>Сумма<input name="amount" required inputmode="decimal" placeholder="1200.00"></label>
+      <label>Валюта<input name="currency" maxlength="3" placeholder="RUB"></label>
+      <label>Кто платил<select name="payerId"></select></label>
+    </div>
+
+    <div class="split-head">
+      <span>Как делим</span>
+      <div class="seg">
+        <button type="button" class="seg-btn active" data-split="equal">Поровну</button>
+        <button type="button" class="seg-btn" data-split="percent">По процентам</button>
+        <button type="button" class="seg-btn" data-split="manual">Вручную</button>
+      </div>
+    </div>
+
+    <div id="split-rows" class="split-rows"></div>
+    <p id="split-status" class="split-status"></p>
+
+    <div class="modal-actions">
+      <button type="button" class="btn btn-ghost" data-close>Отмена</button>
+      <button type="submit" class="btn btn-primary" id="expense-submit">Добавить расход</button>
+    </div>
+  </form>
+</div>
+
+<div id="modal-settle" class="modal" hidden>
+  <h2>Отметить долг оплаченным</h2>
+  <form id="form-settle" class="stack">
+    <p id="settle-desc" class="settle-desc"></p>
+    <label>Сумма<input name="amount" required inputmode="decimal"></label>
+    <label>Комментарий<input name="note" maxlength="200" placeholder="необязательно"></label>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-ghost" data-close>Отмена</button>
+      <button type="submit" class="btn btn-primary">Подтвердить</button>
+    </div>
+  </form>
+</div>
+
+<script src="/app.js"></script>
+</body>
+</html>
