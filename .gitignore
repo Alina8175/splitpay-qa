@@ -1,0 +1,37 @@
+# --- зависимости ---
+node_modules/
+.npm/
+.pnpm-store/
+
+# --- данные приложения (объект тестирования) ---
+app/data/
+app/*.db
+app/*.sqlite
+app/*.sqlite3
+data/
+*.log
+
+# --- секреты ---
+.env
+.env.*
+!.env.example
+settings.json
+.claude/settings.local.json
+*.pem
+*.key
+
+# --- материалы курса: в сдачу попасть не должны ---
+04 · Домашнее задание №2.md
+04 · Домашнее задание №2.pdf
+05 · Материалы к ДЗ №2.md
+05 · Материалы к ДЗ №2.pdf
+
+# --- генерируемое ---
+dist/
+build/
+coverage/
+playwright-report/
+test-results/
+*.tmp
+.DS_Store
+Thumbs.db
