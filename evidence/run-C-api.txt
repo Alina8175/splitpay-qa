@@ -1,0 +1,866 @@
+# Команда:     node --test "tests/api/plan-c.test.mjs"
+# Каталог:     корень репозитория splitpay-qa
+# Окружение:   облачный контейнер сессии
+# Node.js:     v22.22.2
+# Playwright:  1.56.0 (подключён офлайн: npm link playwright)
+# Приложение:  app/ без правок, поднимается оснасткой на свободном порту,
+#              файл данных уводится штатной переменной SPLITPAY_DATA
+# Снято:       2026-08-27 15:20:54 UTC
+#
+# Вывод ниже приведён целиком, включая код возврата. Ничего не отфильтровано.
+#
+TAP version 13
+# Subtest: C-01 · SP-145,SP-116,SP-117: чужая группа по прямому идентификатору — корень группы
+not ok 1 - C-01 · SP-145,SP-116,SP-117: чужая группа по прямому идентификатору — корень группы
+  ---
+  duration_ms: 551.432852
+  type: 'test'
+  location: '/home/claude/splitpay-qa/tests/api/plan-c.test.mjs:176:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-116: обращение к группе чужого владельца обязано возвращать 403 FORBIDDEN; получено 404. 404 скрывает факт существования группы — это безопаснее, но расходится с оракулом (спорное место 1 плана C)
+    
+    404 !== 403
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 403
+  actual: 404
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/splitpay-qa/tests/api/plan-c.test.mjs:186:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: C-02 · SP-146: чужая группа — все вложенные ЧИТАЮЩИЕ пути
+not ok 2 - C-02 · SP-146: чужая группа — все вложенные ЧИТАЮЩИЕ пути
+  ---
+  duration_ms: 348.2873
+  type: 'test'
+  location: '/home/claude/splitpay-qa/tests/api/plan-c.test.mjs:192:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-146: проверка владения обязана применяться ко ВСЕМ вложенным путям с кодом 403 (SP-116); фактические статусы 404, 404, 404, 404
+    + actual - expected
+    
+      [
+    +   404,
+    +   404,
+    +   404,
+    +   404
+    -   403,
+    -   403,
+    -   403,
+    -   403
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 403
+    1: 403
+    2: 403
+    3: 403
+  actual:
+    0: 404
+    1: 404
+    2: 404
+    3: 404
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/splitpay-qa/tests/api/plan-c.test.mjs:214:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-03 · SP-146: чужая группа — все вложенные ИЗМЕНЯЮЩИЕ пути
+not ok 3 - C-03 · SP-146: чужая группа — все вложенные ИЗМЕНЯЮЩИЕ пути
+  ---
+  duration_ms: 329.796189
+  type: 'test'
+  location: '/home/claude/splitpay-qa/tests/api/plan-c.test.mjs:219:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-116: отказ по чужой группе обязан быть 403 FORBIDDEN; фактические статусы 404, 404, 404, 404, 404, 404
+    + actual - expected
+    
+      [
+    +   404,
+    +   404,
+    +   404,
+    +   404,
+    +   404,
+    +   404
+    -   403,
+    -   403,
+    -   403,
+    -   403,
+    -   403,
+    -   403
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 403
+    1: 403
+    2: 403
+    3: 403
+    4: 403
+    5: 403
+  actual:
+    0: 404
+    1: 404
+    2: 404
+    3: 404
+    4: 404
+    5: 404
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/splitpay-qa/tests/api/plan-c.test.mjs:266:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-04 · SP-117: содержимое отказа по чужой группе не раскрывает данные
+not ok 4 - C-04 · SP-117: содержимое отказа по чужой группе не раскрывает данные
+  ---
+  duration_ms: 311.810394
+  type: 'test'
+  location: '/home/claude/splitpay-qa/tests/api/plan-c.test.mjs:270:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-116: ожидался 403 FORBIDDEN, получено 404
+    
+    404 !== 403
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 403
+  actual: 404
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/splitpay-qa/tests/api/plan-c.test.mjs:280:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-05 · SP-116 против SP-104: чужая существующая против несуществующей
+not ok 5 - C-05 · SP-116 против SP-104: чужая существующая против несуществующей
+  ---
+  duration_ms: 317.930793
+  type: 'test'
+  location: '/home/claude/splitpay-qa/tests/api/plan-c.test.mjs:283:1'
+  failureType: 'testCodeFailure'
+  error: 'SP-116 против SP-104: чужая существующая группа (403) и несуществующая (404) обязаны различаться статусом. Здесь оба ответа — 404. Это безопаснее (факт существования не раскрывается) и прямо описано в app/README.md как решение автора, но расходится с оракулом; см. спорное место 1 плана C.'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 404
+  actual: 404
+  operator: 'notStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/splitpay-qa/tests/api/plan-c.test.mjs:296:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-06 · SP-148,SP-147: идентификатор участника не даёт доступа, неизвестный пользователь обслуживается
+not ok 6 - C-06 · SP-148,SP-147: идентификатор участника не даёт доступа, неизвестный пользователь обслуживается
+  ---
+  duration_ms: 171.244797
+  type: 'test'
+  location: '/home/claude/splitpay-qa/tests/api/plan-c.test.mjs:305:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-147: ранее не встречавшийся идентификатор пользователя обязан обслуживаться как обычный — у него просто нет групп; получено 401. Приложение ввело регистрацию, которой оракул не предусматривал: неизвестная идентификация отвергается, а не обслуживается пустым списком
+    
+    401 !== 200
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 200
+  actual: 401
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/splitpay-qa/tests/api/plan-c.test.mjs:319:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-07 · SP-035,SP-144,SP-147: список групп — изоляция владельцев и новый пользователь
+ok 7 - C-07 · SP-035,SP-144,SP-147: список групп — изоляция владельцев и новый пользователь
+  ---
+  duration_ms: 353.391158
+  type: 'test'
+  ...
+# Subtest: C-08 · SP-140,SP-141,SP-142,SP-115,SP-114: идентификация отсутствует, пуста, из пробелов; health
+not ok 8 - C-08 · SP-140,SP-141,SP-142,SP-115,SP-114: идентификация отсутствует, пуста, из пробелов; health
+  ---
+  duration_ms: 161.240683
+  type: 'test'
+  location: '/home/claude/splitpay-qa/tests/api/plan-c.test.mjs:350:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-140: оракул требует идентификации заголовком X-User-Id. Приложение его не обслуживает — идентификация построена на регистрации и Bearer-токене (получено 401). Расхождение с оракулом, фиксируется один раз; сам механизм разграничения при этом работает
+    
+    401 !== 200
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 200
+  actual: 401
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/splitpay-qa/tests/api/plan-c.test.mjs:374:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-09 · SP-143,SP-110: владелец фиксируется при создании и неизменяем
+ok 9 - C-09 · SP-143,SP-110: владелец фиксируется при создании и неизменяем
+  ---
+  duration_ms: 103.806306
+  type: 'test'
+  ...
+# Subtest: C-10 · SP-030,SP-001,SP-109: создание группы — код, поля, состав
+not ok 10 - C-10 · SP-030,SP-001,SP-109: создание группы — код, поля, состав
+  ---
+  duration_ms: 51.665746
+  type: 'test'
+  location: '/home/claude/splitpay-qa/tests/api/plan-c.test.mjs:407:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-109: успешное создание обязано возвращать 201; получено 200. Приложение отвечает 200 на все успешные создания — расхождение с оракулом, вердикт по SP-109 даёт C-29
+    
+    200 !== 201
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 201
+  actual: 200
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/splitpay-qa/tests/api/plan-c.test.mjs:424:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-11 · SP-031,SP-032,SP-033: название группы — длина, пробелы, обрезка
+not ok 11 - C-11 · SP-031,SP-032,SP-033: название группы — длина, пробелы, обрезка
+  ---
+  duration_ms: 62.76198
+  type: 'test'
+  location: '/home/claude/splitpay-qa/tests/api/plan-c.test.mjs:430:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-031: название длиннее 60 символов обязано отклоняться; получено 200 — верхней границы длины нет
+    
+    200 !== 400
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 400
+  actual: 200
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/splitpay-qa/tests/api/plan-c.test.mjs:449:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-12 · SP-034,SP-104: запрос несуществующей группы
+ok 12 - C-12 · SP-034,SP-104: запрос несуществующей группы
+  ---
+  duration_ms: 169.291081
+  type: 'test'
+  ...
+# Subtest: C-13 · SP-002: валюта группы задаётся при создании и неизменяема
+not ok 13 - C-13 · SP-002: валюта группы задаётся при создании и неизменяема
+  ---
+  duration_ms: 104.069164
+  type: 'test'
+  location: '/home/claude/splitpay-qa/tests/api/plan-c.test.mjs:483:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-002: валюта группы обязана быть неизменяемой после создания; PATCH вернул 200 и валюта стала RUB
+    
+    'RUB' !== 'EUR'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'EUR'
+  actual: 'RUB'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/splitpay-qa/tests/api/plan-c.test.mjs:495:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-14 · SP-040,SP-003,SP-005,SP-006: добавление участников — ответ, порядок, идентификаторы
+not ok 14 - C-14 · SP-040,SP-003,SP-005,SP-006: добавление участников — ответ, порядок, идентификаторы
+  ---
+  duration_ms: 158.559497
+  type: 'test'
+  location: '/home/claude/splitpay-qa/tests/api/plan-c.test.mjs:512:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-109: добавление участника — успешное создание, обязан быть 201; получено 200
+    
+    200 !== 201
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 201
+  actual: 200
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/splitpay-qa/tests/api/plan-c.test.mjs:539:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-15 · SP-041: длина имени участника — границы 1 и 40
+not ok 15 - C-15 · SP-041: длина имени участника — границы 1 и 40
+  ---
+  duration_ms: 257.017351
+  type: 'test'
+  location: '/home/claude/splitpay-qa/tests/api/plan-c.test.mjs:542:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-041: имя длиннее 40 символов обязано отклоняться; получено 200 — верхней границы длины имени нет
+    
+    200 !== 400
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 400
+  actual: 200
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/splitpay-qa/tests/api/plan-c.test.mjs:561:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-16 · SP-042: уникальность имён участников БЕЗ УЧЁТА РЕГИСТРА
+not ok 16 - C-16 · SP-042: уникальность имён участников БЕЗ УЧЁТА РЕГИСТРА
+  ---
+  duration_ms: 257.704511
+  type: 'test'
+  location: '/home/claude/splitpay-qa/tests/api/plan-c.test.mjs:567:1'
+  failureType: 'testCodeFailure'
+  error: 'SP-042: имена участников обязаны быть уникальны в пределах группы без учёта регистра; «аня», «АНЯ», «аНя» при уже существующей «Аня» дали 200, 200, 200 — все приняты. Приложение проверяет уникальность по email учётной записи, а не по имени'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/splitpay-qa/tests/api/plan-c.test.mjs:585:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-17 · SP-042,SP-041: уникальность имён БЕЗ УЧЁТА КРАЙНИХ ПРОБЕЛОВ
+not ok 17 - C-17 · SP-042,SP-041: уникальность имён БЕЗ УЧЁТА КРАЙНИХ ПРОБЕЛОВ
+  ---
+  duration_ms: 260.783733
+  type: 'test'
+  location: '/home/claude/splitpay-qa/tests/api/plan-c.test.mjs:593:1'
+  failureType: 'testCodeFailure'
+  error: 'SP-042: имена, различающиеся только крайними пробелами и регистром, обязаны отвергаться как занятые; получено 200, 200, 200'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/splitpay-qa/tests/api/plan-c.test.mjs:612:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-18 · SP-043: предел в 20 участников
+not ok 18 - C-18 · SP-043: предел в 20 участников
+  ---
+  duration_ms: 1148.650154
+  type: 'test'
+  location: '/home/claude/splitpay-qa/tests/api/plan-c.test.mjs:618:1'
+  failureType: 'testCodeFailure'
+  error: 'SP-043: добавление двадцать первого участника обязано быть ошибкой; получено 200 — предела нет'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/splitpay-qa/tests/api/plan-c.test.mjs:634:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-19 · SP-044,SP-109,SP-047: удаление свободного участника
+not ok 19 - C-19 · SP-044,SP-109,SP-047: удаление свободного участника
+  ---
+  duration_ms: 207.764397
+  type: 'test'
+  location: '/home/claude/splitpay-qa/tests/api/plan-c.test.mjs:645:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-109: успешное удаление обязано возвращать 204 с пустым телом; получено 200
+    
+    200 !== 204
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 204
+  actual: 200
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/splitpay-qa/tests/api/plan-c.test.mjs:669:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-20 · SP-045,SP-105: удаление участника с непогашенными долгами
+not ok 20 - C-20 · SP-045,SP-105: удаление участника с непогашенными долгами
+  ---
+  duration_ms: 203.969318
+  type: 'test'
+  location: '/home/claude/splitpay-qa/tests/api/plan-c.test.mjs:674:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-045,SP-105: конфликт состояния обязан возвращать 409 CONFLICT; получено 400, 400, 400
+    + actual - expected
+    
+      [
+    +   400,
+    +   400,
+    +   400
+    -   409,
+    -   409,
+    -   409
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 409
+    1: 409
+    2: 409
+  actual:
+    0: 400
+    1: 400
+    2: 400
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/splitpay-qa/tests/api/plan-c.test.mjs:695:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-21 · SP-045,SP-044: удаление участника — стороны погашения
+not ok 21 - C-21 · SP-045,SP-044: удаление участника — стороны погашения
+  ---
+  duration_ms: 214.245881
+  type: 'test'
+  location: '/home/claude/splitpay-qa/tests/api/plan-c.test.mjs:700:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-045 (редакция 1.1): стороны проведённого погашения не обязаны удаляться
+    + actual - expected
+    
+      [
+        'Аня',
+    -   'Борис',
+        'Виктор'
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 'Аня'
+    1: 'Борис'
+    2: 'Виктор'
+  actual:
+    0: 'Аня'
+    1: 'Виктор'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/splitpay-qa/tests/api/plan-c.test.mjs:713:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-22 · SP-046,SP-047,SP-104: «не найдено» на несуществующем участнике и группе
+ok 22 - C-22 · SP-046,SP-047,SP-104: «не найдено» на несуществующем участнике и группе
+  ---
+  duration_ms: 369.111158
+  type: 'test'
+  ...
+# Subtest: C-23 · SP-030,SP-083,SP-180: группа без расходов — пустые списки, а не отказы
+not ok 23 - C-23 · SP-030,SP-083,SP-180: группа без расходов — пустые списки, а не отказы
+  ---
+  duration_ms: 60.822259
+  type: 'test'
+  location: '/home/claude/splitpay-qa/tests/api/plan-c.test.mjs:753:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-180: история — это расходы и погашения в одном списке. На группе без расходов и погашений она обязана быть пуста; фактически в ней 1 записи вида "group.created" — приложение ведёт журнал действий пользователя, а не историю операций
+    + actual - expected
+    
+    + [
+    +   {
+    +     createdAt: '2026-08-27T15:21:01.252Z',
+    +     id: 'act_1de3d7a653a4701543',
+    +     text: 'Аня создал(а) группу «Пустая»',
+    +     type: 'group.created',
+    +     userId: 'usr_cb977ed1dc946d4f22',
+    +     userName: 'Аня'
+    +   }
+    + ]
+    - []
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual:
+    0:
+      id: 'act_1de3d7a653a4701543'
+      type: 'group.created'
+      text: 'Аня создал(а) группу «Пустая»'
+      userId: 'usr_cb977ed1dc946d4f22'
+      userName: 'Аня'
+      createdAt: '2026-08-27T15:21:01.252Z'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/splitpay-qa/tests/api/plan-c.test.mjs:775:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-24 · SP-082,SP-083,SP-095: группа из одного участника — нули, а не пустой список
+ok 24 - C-24 · SP-082,SP-083,SP-095: группа из одного участника — нули, а не пустой список
+  ---
+  duration_ms: 60.849351
+  type: 'test'
+  ...
+# Subtest: C-25 · SP-100,SP-101,SP-102,SP-108: форма ответа и тело ошибки (единственная проверка формы)
+not ok 25 - C-25 · SP-100,SP-101,SP-102,SP-108: форма ответа и тело ошибки (единственная проверка формы)
+  ---
+  duration_ms: 167.803497
+  type: 'test'
+  location: '/home/claude/splitpay-qa/tests/api/plan-c.test.mjs:810:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-101: тело ошибки обязано иметь вид {"error":{"code":"...","message":"..."}}. Приложение отвечает плоским {"error":"текст"} — кода ошибки нет вовсе. Это ОДНО расхождение, и по соглашению С-C2 оно фиксируется здесь один раз, а не красит собой каждый кейс зоны
+    + actual - expected
+    
+    + [
+    +   'без названия: {"error":"Поле \\"name\\" обязательно"}',
+    +   'несуществующая группа: {"error":"Группа не найдена"}',
+    +   'повторный участник: {"error":"Пользователь уже в группе"}'
+    + ]
+    - []
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual:
+    0: 'без названия: {"error":"Поле \\"name\\" обязательно"}'
+    1: 'несуществующая группа: {"error":"Группа не найдена"}'
+    2: 'повторный участник: {"error":"Пользователь уже в группе"}'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/splitpay-qa/tests/api/plan-c.test.mjs:838:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-26 · SP-106,SP-113: некорректный JSON и живучесть процесса
+ok 26 - C-26 · SP-106,SP-113: некорректный JSON и живучесть процесса
+  ---
+  duration_ms: 214.954547
+  type: 'test'
+  ...
+# Subtest: C-27 · SP-107,SP-120: неподдерживаемый метод на существующем пути
+not ok 27 - C-27 · SP-107,SP-120: неподдерживаемый метод на существующем пути
+  ---
+  duration_ms: 160.995737
+  type: 'test'
+  location: '/home/claude/splitpay-qa/tests/api/plan-c.test.mjs:876:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-120: DELETE /api/groups/{gid} в таблице путей отсутствует — группа не обязана удаляться этим методом (ответ 200)
+    
+    404 !== 200
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 200
+  actual: 404
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/splitpay-qa/tests/api/plan-c.test.mjs:889:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-28 · SP-110,SP-111,SP-112: неизвестные поля, отсутствующие поля, неверные типы
+ok 28 - C-28 · SP-110,SP-111,SP-112: неизвестные поля, отсутствующие поля, неверные типы
+  ---
+  duration_ms: 106.991492
+  type: 'test'
+  ...
+# Subtest: C-29 · SP-109: коды успешных ответов 201 / 200 / 204 (вердикт по SP-109)
+not ok 29 - C-29 · SP-109: коды успешных ответов 201 / 200 / 204 (вердикт по SP-109)
+  ---
+  duration_ms: 107.553891
+  type: 'test'
+  location: '/home/claude/splitpay-qa/tests/api/plan-c.test.mjs:935:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-109: успешное создание обязано возвращать 201; получено 200 и 200 — приложение отвечает 200 на все создания
+    + actual - expected
+    
+      [
+    +   200,
+    +   200
+    -   201,
+    -   201
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 201
+    1: 201
+  actual:
+    0: 200
+    1: 200
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/splitpay-qa/tests/api/plan-c.test.mjs:956:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-30 · SP-121: неизвестный путь под /api/ — JSON, а не HTML
+ok 30 - C-30 · SP-121: неизвестный путь под /api/ — JSON, а не HTML
+  ---
+  duration_ms: 154.338501
+  type: 'test'
+  ...
+# Subtest: C-31 · SP-120: таблица путей отвечает целиком
+not ok 31 - C-31 · SP-120: таблица путей отвечает целиком
+  ---
+  duration_ms: 214.905426
+  type: 'test'
+  location: '/home/claude/splitpay-qa/tests/api/plan-c.test.mjs:981:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-120: приложение обязано обслуживать все пути таблицы. Не обслуживаются вовсе (ни одним методом): GET /api/health; POST /api/groups/{gid}/participants; DELETE /api/groups/{gid}/participants/{pid}; GET /api/groups/{gid}/debts; POST /api/groups/{gid}/debts/{from}/{to}/pay; GET /api/groups/{gid}/transactions. Функции при этом есть — они живут по другим путям (участники → /members, история → /activity, отметка оплаты → /settlements, долги → поле debts[] внутри /balances), кроме /api/health, у которого замены нет. Расхождение с оракулом по именам путей плюс отсутствующая проверка живости; по соглашению С-C1 фиксируется здесь один раз за весь набор
+    + actual - expected
+    
+    + [
+    +   'GET /api/health',
+    +   'POST /api/groups/{gid}/participants',
+    +   'DELETE /api/groups/{gid}/participants/{pid}',
+    +   'GET /api/groups/{gid}/debts',
+    +   'POST /api/groups/{gid}/debts/{from}/{to}/pay',
+    +   'GET /api/groups/{gid}/transactions'
+    + ]
+    - []
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual:
+    0: 'GET /api/health'
+    1: 'POST /api/groups/{gid}/participants'
+    2: 'DELETE /api/groups/{gid}/participants/{pid}'
+    3: 'GET /api/groups/{gid}/debts'
+    4: 'POST /api/groups/{gid}/debts/{from}/{to}/pay'
+    5: 'GET /api/groups/{gid}/transactions'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/splitpay-qa/tests/api/plan-c.test.mjs:1030:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-32 · SP-005,SP-003: идентификаторы — строки, уникальные, не переиспользуются
+not ok 32 - C-32 · SP-005,SP-003: идентификаторы — строки, уникальные, не переиспользуются
+  ---
+  duration_ms: 305.700346
+  type: 'test'
+  location: '/home/claude/splitpay-qa/tests/api/plan-c.test.mjs:1041:1'
+  failureType: 'testCodeFailure'
+  error: 'SP-005: идентификатор удалённого участника не обязан выдаваться заново — иначе ссылки на старого участника начнут указывать на нового. Приложение отождествляет участника с учётной записью, поэтому после удаления и повторного добавления идентификатор тот же'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'usr_e6e53929e272c7d264'
+  actual: 'usr_e6e53929e272c7d264'
+  operator: 'notStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/splitpay-qa/tests/api/plan-c.test.mjs:1063:12)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-33 · SP-007: данные переживают перезапуск процесса, включая погашения
+ok 33 - C-33 · SP-007: данные переживают перезапуск процесса, включая погашения
+  ---
+  duration_ms: 623.643493
+  type: 'test'
+  ...
+# Subtest: C-34 · SP-180,SP-181: состав записи истории — расход и погашение в одном списке
+not ok 34 - C-34 · SP-180,SP-181: состав записи истории — расход и погашение в одном списке
+  ---
+  duration_ms: 151.561141
+  type: 'test'
+  location: '/home/claude/splitpay-qa/tests/api/plan-c.test.mjs:1126:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-181: запись истории обязана иметь СУММУ отдельным полем. У записи есть только человекочитаемый text («Аня добавил(а) расход «Бензин» на 300.00 RUB»), суммы, валюты и сторон операции полями нет — запись истории неразбираема программно
+    + actual - expected
+    
+    + undefined
+    - 30000
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 30000
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/splitpay-qa/tests/api/plan-c.test.mjs:1145:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-35 · SP-182,SP-056: порядок истории — от новых к старым, поимённо
+not ok 35 - C-35 · SP-182,SP-056: порядок истории — от новых к старым, поимённо
+  ---
+  duration_ms: 3460.867149
+  type: 'test'
+  location: '/home/claude/splitpay-qa/tests/api/plan-c.test.mjs:1157:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-056: список расходов обязан идти от старых к новым — противоположно порядку истории
+    + actual - expected
+    
+      [
+    +   'Третий',
+    +   'Второй',
+        'Первый',
+    -   'Второй',
+    -   'Третий'
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 'Первый'
+    1: 'Второй'
+    2: 'Третий'
+  actual:
+    0: 'Третий'
+    1: 'Второй'
+    2: 'Первый'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/splitpay-qa/tests/api/plan-c.test.mjs:1186:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-36 · SP-183,SP-058: удалённый расход исчезает из истории
+not ok 36 - C-36 · SP-183,SP-058: удалённый расход исчезает из истории
+  ---
+  duration_ms: 108.967
+  type: 'test'
+  location: '/home/claude/splitpay-qa/tests/api/plan-c.test.mjs:1190:1'
+  failureType: 'testCodeFailure'
+  error: 'SP-183: удалённый расход обязан исчезать из истории — ни записью с пометкой, ни с нулевой суммой. В истории остались строки: Аня удалил(а) расход «Два» | Аня добавил(а) расход «Два» на 40.00 RUB'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/splitpay-qa/tests/api/plan-c.test.mjs:1212:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-37 · SP-184,SP-110: параметры фильтрации истории игнорируются, а не отвергаются
+not ok 37 - C-37 · SP-184,SP-110: параметры фильтрации истории игнорируются, а не отвергаются
+  ---
+  duration_ms: 157.859387
+  type: 'test'
+  location: '/home/claude/splitpay-qa/tests/api/plan-c.test.mjs:1226:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-184,SP-110: фильтрация истории вне рамок итерации — переданные параметры обязаны игнорироваться. Приложение обслуживает limit (объявлен в app/README.md): ?unknown=да&limit=1&sort=asc → 1 записей вместо 3. Функционально это «больше, чем просили», но оракул выносит фильтрацию за рамки
+    + actual - expected
+    
+    + [
+    +   '?unknown=да&limit=1&sort=asc → 1 записей вместо 3'
+    + ]
+    - []
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual:
+    0: '?unknown=да&limit=1&sort=asc → 1 записей вместо 3'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/splitpay-qa/tests/api/plan-c.test.mjs:1244:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-38 · SP-180,SP-181,SP-182: сверка истории с балансами и долгами
+not ok 38 - C-38 · SP-180,SP-181,SP-182: сверка истории с балансами и долгами
+  ---
+  duration_ms: 166.447684
+  type: 'test'
+  location: '/home/claude/splitpay-qa/tests/api/plan-c.test.mjs:1250:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Сверка 1: суммы записей истории обязаны совпадать со списком расходов один в один. У записей истории поля суммы нет — сверить историю со сводками программно нельзя
+    + actual - expected
+    
+      [
+    +   undefined,
+    +   undefined
+    -   6000,
+    -   30000
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 6000
+    1: 30000
+  actual:
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/splitpay-qa/tests/api/plan-c.test.mjs:1293:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..38
+# tests 38
+# suites 0
+# pass 9
+# fail 29
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 12517.183651
+=== код возврата: 1 ===
