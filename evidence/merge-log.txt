@@ -1,0 +1,34 @@
+# Слияние веток зон в main
+warning: in the working copy of 'README.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'REPORT.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sessions/session-3.md', LF will be replaced by CRLF the next time Git touches it
+Merge made by the 'ort' strategy.
+ evidence/run-A-api.txt    | 669 ++++++++++++++++++++++++++++++++++++++
+ tests/api/plan-a.test.mjs | 794 ++++++++++++++++++++++++++++++++++++++++++++++
+ tests/ui/plan-a.spec.mjs  | 116 +++++++
+ 3 files changed, 1579 insertions(+)
+ create mode 100644 evidence/run-A-api.txt
+ create mode 100644 tests/api/plan-a.test.mjs
+ create mode 100644 tests/ui/plan-a.spec.mjs
+warning: in the working copy of 'README.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'REPORT.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sessions/session-3.md', LF will be replaced by CRLF the next time Git touches it
+Merge made by the 'ort' strategy.
+ evidence/run-B-api.txt    | 426 ++++++++++++++++++++++++++++++++
+ tests/api/plan-b.test.mjs | 607 ++++++++++++++++++++++++++++++++++++++++++++++
+ tests/ui/plan-b.spec.mjs  | 143 +++++++++++
+ 3 files changed, 1176 insertions(+)
+ create mode 100644 evidence/run-B-api.txt
+ create mode 100644 tests/api/plan-b.test.mjs
+ create mode 100644 tests/ui/plan-b.spec.mjs
+warning: in the working copy of 'README.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'REPORT.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'sessions/session-3.md', LF will be replaced by CRLF the next time Git touches it
+Merge made by the 'ort' strategy.
+ evidence/run-C-api.txt    |  866 ++++++++++++++++++++++++++++++
+ tests/api/plan-c.test.mjs | 1304 +++++++++++++++++++++++++++++++++++++++++++++
+ tests/ui/plan-c.spec.mjs  |  249 +++++++++
+ 3 files changed, 2419 insertions(+)
+ create mode 100644 evidence/run-C-api.txt
+ create mode 100644 tests/api/plan-c.test.mjs
+ create mode 100644 tests/ui/plan-c.spec.mjs
