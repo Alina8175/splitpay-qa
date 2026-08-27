@@ -1,0 +1,669 @@
+TAP version 13
+# Subtest: A-01 · SP-061,SP-062,SP-063: 100.00 на троих — копейка первому добавленному
+ok 1 - A-01 · SP-061,SP-062,SP-063: 100.00 на троих — копейка первому добавленному
+  ---
+  duration_ms: 233.513673
+  type: 'test'
+  ...
+# Subtest: A-02 · SP-062: тот же расход дважды даёт то же распределение
+ok 2 - A-02 · SP-062: тот же расход дважды даёт то же распределение
+  ---
+  duration_ms: 102.063618
+  type: 'test'
+  ...
+# Subtest: A-03 · SP-007,SP-062: распределение переживает перезапуск процесса
+ok 3 - A-03 · SP-007,SP-062: распределение переживает перезапуск процесса
+  ---
+  duration_ms: 362.935989
+  type: 'test'
+  ...
+# Subtest: A-04 · SP-062: порядок в запросе обратный порядку добавления — копейка всё равно первому добавленному
+not ok 4 - A-04 · SP-062: порядок в запросе обратный порядку добавления — копейка всё равно первому добавленному
+  ---
+  duration_ms: 102.271439
+  type: 'test'
+  location: '/sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:117:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-062: остаток раздаётся по порядку добавления в группу, а не по порядку в запросе
+    
+    3333 !== 3334
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 3334
+  actual: 3333
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:126:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: A-05 · SP-064,SP-019: одна копейка на троих → 0.01 / 0.00 / 0.00
+ok 5 - A-05 · SP-064,SP-019: одна копейка на троих → 0.01 / 0.00 / 0.00
+  ---
+  duration_ms: 93.111594
+  type: 'test'
+  ...
+# Subtest: A-06 · SP-062: остаток больше единицы раздаётся по одной, а не целиком первому
+ok 6 - A-06 · SP-062: остаток больше единицы раздаётся по одной, а не целиком первому
+  ---
+  duration_ms: 218.020146
+  type: 'test'
+  ...
+# Subtest: A-07 · SP-062: состав — подмножество группы, порядок считается по группе
+not ok 7 - A-07 · SP-062: состав — подмножество группы, порядок считается по группе
+  ---
+  duration_ms: 127.987367
+  type: 'test'
+  location: '/sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:162:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-062: копейка достаётся тому, кто раньше ДОБАВЛЕН В ГРУППУ, среди входящих в состав
+    
+    3333 !== 3334
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 3334
+  actual: 3333
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:175:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: A-08 · SP-016: нулевая сумма "0" и "0.00" отклоняется
+not ok 8 - A-08 · SP-016: нулевая сумма "0" и "0.00" отклоняется
+  ---
+  duration_ms: 93.841065
+  type: 'test'
+  location: '/sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:195:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-016: "0": статус 400 получен ВЕРНО, требование по сумме соблюдено. Красным тест делает форма тела ошибки: SP-101 требует {"error":{"code","message"}}, SP-103 — код VALIDATION_ERROR; получено {"error":"Сумма расхода должна быть больше нуля"}
+    + actual - expected
+    
+    + undefined
+    - 'VALIDATION_ERROR'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'VALIDATION_ERROR'
+  operator: 'strictEqual'
+  stack: |-
+    rejects (file:///sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:190:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async TestContext.<anonymous> (file:///sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:197:3)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: A-09 · SP-017: отрицательная сумма отклоняется
+not ok 9 - A-09 · SP-017: отрицательная сумма отклоняется
+  ---
+  duration_ms: 92.109825
+  type: 'test'
+  location: '/sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:201:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-017: "-1.00": статус 400 получен ВЕРНО, требование по сумме соблюдено. Красным тест делает форма тела ошибки: SP-101 требует {"error":{"code","message"}}, SP-103 — код VALIDATION_ERROR; получено {"error":"Сумма расхода должна быть больше нуля"}
+    + actual - expected
+    
+    + undefined
+    - 'VALIDATION_ERROR'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'VALIDATION_ERROR'
+  operator: 'strictEqual'
+  stack: |-
+    rejects (file:///sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:190:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async TestContext.<anonymous> (file:///sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:203:3)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: A-10 · SP-012: больше двух знаков после точки отклоняется
+not ok 10 - A-10 · SP-012: больше двух знаков после точки отклоняется
+  ---
+  duration_ms: 92.255032
+  type: 'test'
+  location: '/sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:206:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-012: "100.005": статус 400 получен ВЕРНО, требование по сумме соблюдено. Красным тест делает форма тела ошибки: SP-101 требует {"error":{"code","message"}}, SP-103 — код VALIDATION_ERROR; получено {"error":"Поле \"amount\" должно быть числом с не более чем 2 знаками после запятой"}
+    + actual - expected
+    
+    + undefined
+    - 'VALIDATION_ERROR'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'VALIDATION_ERROR'
+  operator: 'strictEqual'
+  stack: |-
+    rejects (file:///sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:190:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async TestContext.<anonymous> (file:///sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:208:3)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: A-11 · SP-013: крайние пробелы в сумме отбрасываются
+ok 11 - A-11 · SP-013: крайние пробелы в сумме отбрасываются
+  ---
+  duration_ms: 92.282321
+  type: 'test'
+  ...
+# Subtest: A-12 · SP-014,SP-015,SP-112: запятая, экспонента, число вместо строки
+not ok 12 - A-12 · SP-014,SP-015,SP-112: запятая, экспонента, число вместо строки
+  ---
+  duration_ms: 94.90856
+  type: 'test'
+  location: '/sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:223:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-014: запятая как разделитель: ожидается 400, получено 200 {"expense":{"id":"exp_aa71fe728466bfa19a","groupId":"grp_349714e5c05ff236ec","description":"граница","amount":10000,"amountText":"100.00","currency":"RUB","category":"Транспорт","payerId":"usr_0d0c6c9
+    
+    200 !== 400
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 400
+  actual: 200
+  operator: 'strictEqual'
+  stack: |-
+    rejects (file:///sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:188:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async TestContext.<anonymous> (file:///sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:225:3)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: A-13 · SP-018: верхняя граница суммы 10000000.00
+not ok 13 - A-13 · SP-018: верхняя граница суммы 10000000.00
+  ---
+  duration_ms: 97.166505
+  type: 'test'
+  location: '/sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:230:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-018: превышение предела: ожидается 400, получено 200 {"expense":{"id":"exp_4d20ecb08d09e2deb2","groupId":"grp_8f94a4f1d240671dab","description":"граница","amount":1000000001,"amountText":"10000000.01","currency":"RUB","category":"Транспорт","payerId":"u
+    
+    200 !== 400
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 400
+  actual: 200
+  operator: 'strictEqual'
+  stack: |-
+    rejects (file:///sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:188:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async TestContext.<anonymous> (file:///sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:239:3)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: A-14 · SP-021: нормализация представления — "100.5" и "1"
+ok 14 - A-14 · SP-021: нормализация представления — "100.5" и "1"
+  ---
+  duration_ms: 96.185581
+  type: 'test'
+  ...
+# Subtest: A-15 · SP-010,SP-076: целочисленность арифметики — три ловушки плавающей точки
+ok 15 - A-15 · SP-010,SP-076: целочисленность арифметики — три ловушки плавающей точки
+  ---
+  duration_ms: 98.293948
+  type: 'test'
+  ...
+# Subtest: A-16 · SP-068,SP-076: проценты 33/33/34 на 100.00
+ok 16 - A-16 · SP-068,SP-076: проценты 33/33/34 на 100.00
+  ---
+  duration_ms: 92.25285
+  type: 'test'
+  ...
+# Subtest: A-17 · SP-067: те же проценты на сумму, которая на них не делится
+ok 17 - A-17 · SP-067: те же проценты на сумму, которая на них не делится
+  ---
+  duration_ms: 91.792822
+  type: 'test'
+  ...
+# Subtest: A-18 · SP-067: остаток по наибольшей дробной части, а не первому по порядку
+ok 18 - A-18 · SP-067: остаток по наибольшей дробной части, а не первому по порядку
+  ---
+  duration_ms: 93.498206
+  type: 'test'
+  ...
+# Subtest: A-19 · SP-067: остаток уходит не к наибольшей доле и не к крайнему участнику
+ok 19 - A-19 · SP-067: остаток уходит не к наибольшей доле и не к крайнему участнику
+  ---
+  duration_ms: 93.212218
+  type: 'test'
+  ...
+# Subtest: A-20 · SP-066: проценты, не дающие ровно 100.00, отклоняются
+ok 20 - A-20 · SP-066: проценты, не дающие ровно 100.00, отклоняются
+  ---
+  duration_ms: 92.213256
+  type: 'test'
+  ...
+# Subtest: A-21 · SP-065: формат и диапазон отдельного процента — шесть отказов и один приём
+not ok 21 - A-21 · SP-065: формат и диапазон отдельного процента — шесть отказов и один приём
+  ---
+  duration_ms: 91.627776
+  type: 'test'
+  location: '/sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:347:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-065: запятая — ожидается 400, получено 200 {"expense":{"id":"exp_da6a917ec511ca174b","groupId":"grp_4b792733d113dbb864","description":"формат процента","amount":10000,"amountText":"100.00","currency":"RU
+    
+    200 !== 400
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 400
+  actual: 200
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:362:12)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: A-22 · SP-069,SP-071: ручное распределение, сумма частей совпадает
+ok 22 - A-22 · SP-069,SP-071: ручное распределение, сумма частей совпадает
+  ---
+  duration_ms: 91.603513
+  type: 'test'
+  ...
+# Subtest: A-23 · SP-071: расхождение ручных частей в одну копейку отклоняется
+ok 23 - A-23 · SP-071: расхождение ручных частей в одну копейку отклоняется
+  ---
+  duration_ms: 92.330588
+  type: 'test'
+  ...
+# Subtest: A-24 · SP-070: ручной ноль допускается
+ok 24 - A-24 · SP-070: ручной ноль допускается
+  ---
+  duration_ms: 91.864056
+  type: 'test'
+  ...
+# Subtest: A-25 · SP-070: отрицательная часть при верной общей сумме отклоняется
+ok 25 - A-25 · SP-070: отрицательная часть при верной общей сумме отклоняется
+  ---
+  duration_ms: 92.234421
+  type: 'test'
+  ...
+# Subtest: A-26 · SP-069,SP-012,SP-014: формат ручной части
+not ok 26 - A-26 · SP-069,SP-012,SP-014: формат ручной части
+  ---
+  duration_ms: 93.243817
+  type: 'test'
+  location: '/sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:417:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-069: часть задаётся в том же формате, что и сумма расхода (50,00); получено 200
+    
+    200 !== 400
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 400
+  actual: 200
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:424:12)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: A-27 · SP-026: расход в валюте, отличной от валюты группы, отклоняется
+not ok 27 - A-27 · SP-026: расход в валюте, отличной от валюты группы, отклоняется
+  ---
+  duration_ms: 94.242241
+  type: 'test'
+  location: '/sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:431:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-026: валюта расхода обязана совпадать с валютой группы, конвертация не выполняется; получено 200 {"expense":{"id":"exp_532a6fd4d0fcf337db","groupId":"grp_17353f1ceebe60e6b4","description":"чужая валюта","amount":10000,"amountText":"100.00","currency":"USD","category":"Транспорт","payerId":"usr_33
+    
+    200 !== 400
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 400
+  actual: 200
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:437:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: A-28 · SP-024,SP-027: валюта по умолчанию у группы и у расхода
+ok 28 - A-28 · SP-024,SP-027: валюта по умолчанию у группы и у расхода
+  ---
+  duration_ms: 64.662801
+  type: 'test'
+  ...
+# Subtest: A-29 · SP-022,SP-023: код валюты вне набора и в нижнем регистре
+not ok 29 - A-29 · SP-022,SP-023: код валюты вне набора и в нижнем регистре
+  ---
+  duration_ms: 31.796507
+  type: 'test'
+  location: '/sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:460:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-023: код вне набора RUB/USD/EUR обязан отклоняться, включая заведомо существующие валюты; получено 200
+    
+    200 !== 400
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 400
+  actual: 200
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:463:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: A-30 · SP-028: код валюты сопровождает каждую денежную величину ответа
+not ok 30 - A-30 · SP-028: код валюты сопровождает каждую денежную величину ответа
+  ---
+  duration_ms: 93.281468
+  type: 'test'
+  location: '/sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:470:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-028: КАЖДАЯ денежная величина в ответах API обязана сопровождаться кодом валюты — начисления тоже
+    
+    undefined !== 'USD'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'USD'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:480:12)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: A-20-NAMES · SP-020: денежная величина в двух видах — суффиксы Minor и Formatted
+not ok 31 - A-20-NAMES · SP-020: денежная величина в двух видах — суффиксы Minor и Formatted
+  ---
+  duration_ms: 92.20272
+  type: 'test'
+  location: '/sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:485:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-020: сумма обязана присутствовать целым числом минимальных единиц в поле с суффиксом Minor
+    + actual - expected
+    
+    + 'undefined'
+    - 'number'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'number'
+  actual: 'undefined'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:493:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: A-31 · SP-051: плательщик — участник другой группы
+ok 32 - A-31 · SP-051: плательщик — участник другой группы
+  ---
+  duration_ms: 180.015587
+  type: 'test'
+  ...
+# Subtest: A-32 · SP-052: чужой участник, пустой состав, несуществующий идентификатор
+ok 33 - A-32 · SP-052: чужой участник, пустой состав, несуществующий идентификатор
+  ---
+  duration_ms: 186.527929
+  type: 'test'
+  ...
+# Subtest: A-33 · SP-053: повтор участника в составе отклоняется
+ok 34 - A-33 · SP-053: повтор участника в составе отклоняется
+  ---
+  duration_ms: 93.856081
+  type: 'test'
+  ...
+# Subtest: A-34 · SP-054: длина описания 140 / 141 / пустое, счёт относительный (правка D-39)
+not ok 35 - A-34 · SP-054: длина описания 140 / 141 / пустое, счёт относительный (правка D-39)
+  ---
+  duration_ms: 98.70921
+  type: 'test'
+  location: '/sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:540:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-054: описание длиной 141 обязано отклоняться; получено 200
+    
+    200 !== 400
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 400
+  actual: 200
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:553:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: A-35 · SP-055: плательщик не обязан входить в состав распределения
+ok 36 - A-35 · SP-055: плательщик не обязан входить в состав распределения
+  ---
+  duration_ms: 92.154219
+  type: 'test'
+  ...
+# Subtest: A-36 · SP-056: список расходов возвращается от старых к новым
+not ok 37 - A-36 · SP-056: список расходов возвращается от старых к новым
+  ---
+  duration_ms: 97.341967
+  type: 'test'
+  location: '/sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:577:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-056: расходы обязаны возвращаться в порядке добавления, от старых к новым
+    + actual - expected
+    
+      [
+    +   'exp_4a7b5f3ee7712a8a17',
+    +   'exp_4f80b096b5b636c4cc',
+        'exp_40ced77691df8c3278',
+    -   'exp_4f80b096b5b636c4cc',
+    -   'exp_4a7b5f3ee7712a8a17'
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 'exp_40ced77691df8c3278'
+    1: 'exp_4f80b096b5b636c4cc'
+    2: 'exp_4a7b5f3ee7712a8a17'
+  actual:
+    0: 'exp_4a7b5f3ee7712a8a17'
+    1: 'exp_4f80b096b5b636c4cc'
+    2: 'exp_40ced77691df8c3278'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:591:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: A-37 · SP-057,SP-058,SP-109: удаление расхода и повторное удаление
+not ok 38 - A-37 · SP-057,SP-058,SP-109: удаление расхода и повторное удаление
+  ---
+  duration_ms: 95.221747
+  type: 'test'
+  location: '/sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:595:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-109: успешное удаление обязано возвращать 204; получено 200
+    
+    200 !== 204
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 204
+  actual: 200
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:604:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: A-38 · SP-059: расход в несуществующую группу — «не найдено»
+ok 39 - A-38 · SP-059: расход в несуществующую группу — «не найдено»
+  ---
+  duration_ms: 92.483122
+  type: 'test'
+  ...
+# Subtest: A-39 · SP-060,SP-111: неизвестный способ распределения и его отсутствие
+ok 40 - A-39 · SP-060,SP-111: неизвестный способ распределения и его отсутствие
+  ---
+  duration_ms: 93.599589
+  type: 'test'
+  ...
+# Subtest: A-40 · SP-072,SP-074,SP-075: набор категорий, значение по умолчанию, возврат при чтении
+not ok 41 - A-40 · SP-072,SP-074,SP-075: набор категорий, значение по умолчанию, возврат при чтении
+  ---
+  duration_ms: 99.783614
+  type: 'test'
+  location: '/sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:643:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-074: при отсутствии поля категории обязана подставляться other
+    
+    'Прочее' !== 'other'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'other'
+  actual: 'Прочее'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:659:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: A-41 · SP-073: категория вне набора отклоняется
+not ok 42 - A-41 · SP-073: категория вне набора отклоняется
+  ---
+  duration_ms: 89.516299
+  type: 'test'
+  location: '/sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:663:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-073: категория вне набора обязана отклоняться с VALIDATION_ERROR; получено 200
+    
+    200 !== 400
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 400
+  actual: 200
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:669:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: A-47 · SP-004,SP-110: полный состав полей расхода и игнорирование неизвестных полей
+ok 43 - A-47 · SP-004,SP-110: полный состав полей расхода и игнорирование неизвестных полей
+  ---
+  duration_ms: 92.507539
+  type: 'test'
+  ...
+# Subtest: A-48 · SP-026,SP-152: PUT с валютой, отличной от валюты группы
+not ok 44 - A-48 · SP-026,SP-152: PUT с валютой, отличной от валюты группы
+  ---
+  duration_ms: 97.893462
+  type: 'test'
+  location: '/sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:729:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-026 + SP-152: к изменяемому расходу обязаны применяться те же правила проверки, что при создании (currency USD в рублёвой группе); получено 200 {"expense":{"id":"exp_7e418f8944ed803de0","groupId":"grp_afea7cdb16d0f77509","description":"изменённый","amount":9000,"amountText":"90.00","currency":"USD","category":"Транспорт","payerId":"usr_849361
+    
+    200 !== 400
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 400
+  actual: 200
+  operator: 'strictEqual'
+  stack: |-
+    putMatrix (file:///sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:716:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async TestContext.<anonymous> (file:///sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:730:3)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: A-49 · SP-073,SP-152: PUT с категорией вне набора
+not ok 45 - A-49 · SP-073,SP-152: PUT с категорией вне набора
+  ---
+  duration_ms: 94.930508
+  type: 'test'
+  location: '/sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:733:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-073 + SP-152: к изменяемому расходу обязаны применяться те же правила проверки, что при создании (category groceries); получено 200 {"expense":{"id":"exp_67ca13fca8a3bdfdad","groupId":"grp_6160f00cbf29fa6819","description":"изменённый","amount":9000,"amountText":"90.00","currency":"RUB","category":"groceries","payerId":"usr_108f44
+    
+    200 !== 400
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 400
+  actual: 200
+  operator: 'strictEqual'
+  stack: |-
+    putMatrix (file:///sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:716:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async TestContext.<anonymous> (file:///sessions/rcw-01d8xbdrp6k8tyntfndbpfsr/mnt/work-A/tests/api/plan-a.test.mjs:734:3)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: A-50 · SP-060,SP-152: PUT с неизвестным способом распределения
+ok 46 - A-50 · SP-060,SP-152: PUT с неизвестным способом распределения
+  ---
+  duration_ms: 95.045135
+  type: 'test'
+  ...
+# Subtest: A-51 · SP-052,SP-152: PUT с чужим участником в составе
+ok 47 - A-51 · SP-052,SP-152: PUT с чужим участником в составе
+  ---
+  duration_ms: 184.103927
+  type: 'test'
+  ...
+# Subtest: A-52 · SP-066,SP-152: PUT с процентами, не дающими 100.00
+ok 48 - A-52 · SP-066,SP-152: PUT с процентами, не дающими 100.00
+  ---
+  duration_ms: 96.972778
+  type: 'test'
+  ...
+# Subtest: A-53 · SP-150,SP-151: PUT меняет описание и категорию и не затирает валюту
+ok 49 - A-53 · SP-150,SP-151: PUT меняет описание и категорию и не затирает валюту
+  ---
+  duration_ms: 65.755913
+  type: 'test'
+  ...
+1..49
+# tests 49
+# suites 0
+# pass 29
+# fail 20
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5423.232088
+=== код возврата: 1 ===
