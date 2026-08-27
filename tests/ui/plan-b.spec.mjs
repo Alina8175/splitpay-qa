@@ -12,6 +12,35 @@ import {
   startApp, newUser, launch, openPage, loginAs, createGroupUi, addExpenseUi, openTab, mainText, sleep,
 } from './_ui-harness.mjs';
 
+// ── Правка оснастки, внесена в сессии 4 ────────────────────────────────────────
+// Две ошибки оснастки красили кейсы B-33, B-34 и B-35 без всякой находки:
+//  1. Строка долга на странице занимает ДВЕ строки текста («Борис→Аня» и
+//     «150.00 RUB»), а B-33 искал обе части в одной строке и не находил ни одной.
+//  2. Нажатие «Оплачен» открывает модальное окно «Отметить долг оплаченным»;
+//     без нажатия «Подтвердить» погашение не проводится, а подложка окна
+//     перехватывает все последующие клики — B-34 и B-35 падали по таймауту.
+// Правка касается только оснастки проверок; ожидания кейсов не меняются.
+
+/** Строки блока долгов, собранные целиком: имена и сумма приходят разными строками. */
+function debtRows(txt) {
+  const block = (txt.split(/кто кому должен/i)[1] || txt).split(/Балансы/)[0];
+  const rows = [];
+  for (const line of block.split('\n').map((s) => s.trim()).filter(Boolean)) {
+    if (/→|->|должен/.test(line)) rows.push(line);
+    else if (rows.length) rows[rows.length - 1] += ' ' + line;
+  }
+  return rows;
+}
+
+/** Подтверждение модального окна погашения, если оно открылось. */
+async function confirmSettle(p) {
+  const heading = p.getByRole('heading', { name: /Отметить долг оплаченным/i });
+  if (await heading.count()) {
+    await p.getByRole('button', { name: 'Подтвердить' }).click();
+    await sleep(900);
+  }
+}
+
 let app, browser, page, users;
 before(async () => {
   app = await startApp();
@@ -40,7 +69,7 @@ test('B-32 · SP-131,SP-133: увидеть балансы', async () => {
 test('B-33 · SP-091,SP-131,SP-095: долги с направлением, суммой и статусом', async () => {
   await openTab(page, 'Долги');
   const txt = await mainText(page);
-  const rows = txt.split('\n').filter((l) => /33\.33/.test(l) && /Борис|Вера/.test(l));
+  const rows = debtRows(txt).filter((l) => /33\.33/.test(l) && /Борис|Вера/.test(l));
   assert.ok(rows.length >= 1, 'SP-131: список долгов обязан быть виден');
 
   const borisRow = rows.find((l) => /Борис/.test(l) && /Аня/.test(l));
@@ -70,7 +99,8 @@ test('B-37 · достижимость элемента отметки опла�
 test('B-34 · SP-131,SP-168: отметить долг оплаченным через интерфейс', async () => {
   await openTab(page, 'Долги');
   await page.getByRole('button', { name: /Оплачен/i }).first().click();
-  await sleep(1000);
+  await sleep(600);
+  await confirmSettle(page);
   const txt = await mainText(page);
   assert.match(txt, /33\.33/, 'SP-168: второй долг обязан остаться');
   assert.match(txt, /Аня\s*33\.33|33\.33\s*$|Аня[^\n]*33\.33/m,
@@ -91,7 +121,8 @@ test('B-35 · SP-132,SP-166: отказ 409 показан текстом', asyn
       + 'который её и провалил: приложение проводит второе погашение вместо 409 CONFLICT.');
   }
   await mark.first().click();
-  await sleep(900);
+  await sleep(600);
+  await confirmSettle(page);
   const body = await page.locator('body').innerText();
   assert.match(body, /уже|оплач|погаш|conflict|409/i,
     'SP-132: отказ 409 обязан быть показан на странице ВИДИМЫМ ТЕКСТОМ, а не молча проигнорирован');
