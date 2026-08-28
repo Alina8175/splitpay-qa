@@ -1,0 +1,195 @@
+TAP version 13
+# [A-42 · наблюдение по D-17] доли на экране: ЕСТЬ
+# Subtest: A-42 · SP-131,SP-133,SP-062: добавление расхода и отображение сумм
+ok 1 - A-42 · SP-131,SP-133,SP-062: добавление расхода и отображение сумм
+  ---
+  duration_ms: 1029.056025
+  type: 'test'
+  ...
+# Subtest: A-43 · SP-132: ошибка от API показана на странице текстом
+ok 2 - A-43 · SP-132: ошибка от API показана на странице текстом
+  ---
+  duration_ms: 1618.956814
+  type: 'test'
+  ...
+# Subtest: A-44 · SP-131,SP-150: изменение расхода через интерфейс
+ok 3 - A-44 · SP-131,SP-150: изменение расхода через интерфейс
+  ---
+  duration_ms: 2114.596064
+  type: 'test'
+  ...
+# Subtest: A-45 · SP-133: код валюты в группе с валютой, отличной от рубля
+ok 4 - A-45 · SP-133: код валюты в группе с валютой, отличной от рубля
+  ---
+  duration_ms: 750.11684
+  type: 'test'
+  ...
+# Subtest: A-46 · ревизия доступности формы расхода: роль и видимый текст
+ok 5 - A-46 · ревизия доступности формы расхода: роль и видимый текст
+  ---
+  duration_ms: 1260.677888
+  type: 'test'
+  ...
+# Subtest: A-46-NET · SP-130: страница работает без обращений в сеть
+ok 6 - A-46-NET · SP-130: страница работает без обращений в сеть
+  ---
+  duration_ms: 863.014993
+  type: 'test'
+  ...
+# Subtest: B-32 · SP-131,SP-133: увидеть балансы
+not ok 7 - B-32 · SP-131,SP-133: увидеть балансы
+  ---
+  duration_ms: 1510.041144
+  type: 'test'
+  location: '/home/claude/repo/tests/ui/plan-b.spec.mjs:59:1'
+  failureType: 'testCodeFailure'
+  error: 'SP-133: денежные величины на странице обязаны отображаться С КОДОМ ВАЛЮТЫ — блок балансов тоже'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: |-
+    ← Все группы
+    Поездка
+    
+    3 участник(ов) · валюта по умолчанию RUB
+    
+    + Расход
+    Удалить группу
+    Ваш баланс, RUB
+    66.66
+    Расходы
+    Долги
+    Участники
+    История
+    
+    RUB · КТО КОМУ ДОЛЖЕН
+    
+    Вера→Аня
+    33.33 RUB Оплачен
+    Борис→Аня
+    33.33 RUB Оплачен
+    Балансы
+    Аня
+    66.66
+    Вера
+    -33.33
+    Борис
+    -33.33
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/ui/plan-b.spec.mjs:65:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: B-33 · SP-091,SP-131,SP-095: долги с направлением, суммой и статусом
+not ok 8 - B-33 · SP-091,SP-131,SP-095: долги с направлением, суммой и статусом
+  ---
+  duration_ms: 442.288842
+  type: 'test'
+  location: '/home/claude/repo/tests/ui/plan-b.spec.mjs:69:1'
+  failureType: 'testCodeFailure'
+  error: 'SP-091 + SP-163: статус долга обязан читаться ТЕКСТОМ, а не только цветом или значком'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: 'Борис→Аня 33.33 RUB Оплачен'
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/ui/plan-b.spec.mjs:85:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: B-37 · достижимость элемента отметки оплаты по роли и тексту
+ok 9 - B-37 · достижимость элемента отметки оплаты по роли и тексту
+  ---
+  duration_ms: 432.9489
+  type: 'test'
+  ...
+# Subtest: B-34 · SP-131,SP-168: отметить долг оплаченным через интерфейс
+ok 10 - B-34 · SP-131,SP-168: отметить долг оплаченным через интерфейс
+  ---
+  duration_ms: 2001.397623
+  type: 'test'
+  ...
+# [B-35 · наблюдение] элементов отметки оплаты после B-34: 1
+# Subtest: B-35 · SP-132,SP-166: отказ 409 показан текстом
+not ok 11 - B-35 · SP-132,SP-166: отказ 409 показан текстом
+  ---
+  duration_ms: 435.392362
+  type: 'test'
+  location: '/home/claude/repo/tests/ui/plan-b.spec.mjs:112:1'
+  failureType: 'testCodeFailure'
+  error: 'SP-166 средствами интерфейса: элемент отметки на уже оплаченной строке отсутствует — повторное нажатие недостижимо. Наблюдение фиксируется; проверка кода 409 остаётся за B-16, который её и провалил: приложение проводит второе погашение вместо 409 CONFLICT.'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  operator: 'fail'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/ui/plan-b.spec.mjs:119:12)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: B-36 · SP-133,SP-092: два знака и код валюты у копеечных величин
+ok 12 - B-36 · SP-133,SP-092: два знака и код валюты у копеечных величин
+  ---
+  duration_ms: 1096.712929
+  type: 'test'
+  ...
+# Subtest: C-39 · SP-130,SP-120: страница отдаётся и работает без обращений в сеть
+ok 13 - C-39 · SP-130,SP-120: страница отдаётся и работает без обращений в сеть
+  ---
+  duration_ms: 1271.807293
+  type: 'test'
+  ...
+# Subtest: C-40 · SP-131,SP-133: путь по интерфейсу — вход, группа, участник, история с записями
+ok 14 - C-40 · SP-131,SP-133: путь по интерфейсу — вход, группа, участник, история с записями
+  ---
+  duration_ms: 5382.754642
+  type: 'test'
+  ...
+# Subtest: C-41 · SP-132,SP-117: ошибка от API показывается текстом, чужие данные не утекают
+ok 15 - C-41 · SP-132,SP-117: ошибка от API показывается текстом, чужие данные не утекают
+  ---
+  duration_ms: 3880.001876
+  type: 'test'
+  ...
+# Subtest: C-42 · SP-131,SP-132: доступность — сценарий, невыразимый через роль и текст
+not ok 16 - C-42 · SP-131,SP-132: доступность — сценарий, невыразимый через роль и текст
+  ---
+  duration_ms: 4343.323707
+  type: 'test'
+  location: '/home/claude/repo/tests/ui/plan-c.spec.mjs:184:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Примечание SPEC 1.2 к SP-134/SP-135: каждый элемент сценария обязан адресоваться ролью с доступным именем либо видимым текстом. Недостижимы только через CSS-селектор, порядковый индекс или служебный атрибут: элемент выбора и открытия группы из списка; фильтры списка расходов: 2 поля выбора без доступного имени; область показа ошибки: текст «Сумма расхода должна быть больше нуля» выводится в элементе без роли alert или status — программе чтения с экрана он не объявляется
+    + actual - expected
+    
+    + [
+    +   'элемент выбора и открытия группы из списка',
+    +   'фильтры списка расходов: 2 поля выбора без доступного имени',
+    +   'область показа ошибки: текст «Сумма расхода должна быть больше нуля» выводится в элементе без роли alert или status — программе чтения с экрана он не объявляется'
+    + ]
+    - []
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual:
+    0: 'элемент выбора и открытия группы из списка'
+    1: 'фильтры списка расходов: 2 поля выбора без доступного имени'
+    2: 'область показа ошибки: текст «Сумма расхода должна быть больше нуля» выводится в элементе без роли alert или status — программе чтения с экрана он не объявляется'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/ui/plan-c.spec.mjs:245:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..16
+# tests 16
+# suites 0
+# pass 12
+# fail 4
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 29710.791085
+# код возврата node --test: 1

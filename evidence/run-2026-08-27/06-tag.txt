@@ -1,0 +1,14 @@
+# Перестановка тега last-qa-run
+
+снято мёртвых замков перед операцией (Р-1): 0
+было : нет
+стало: befa676
+
+$ git tag -f last-qa-run
+код возврата: 0
+
+$ git tag -l -n1
+last-qa-run     workflow: qa-regress
+
+Тег локальный. На сервер он попадает отдельной командой владельца:
+  git push --force origin last-qa-run

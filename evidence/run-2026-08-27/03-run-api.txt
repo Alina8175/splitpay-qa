@@ -1,0 +1,1928 @@
+TAP version 13
+# Subtest: A-01 · SP-061,SP-062,SP-063: 100.00 на троих — копейка первому добавленному
+ok 1 - A-01 · SP-061,SP-062,SP-063: 100.00 на троих — копейка первому добавленному
+  ---
+  duration_ms: 246.037174
+  type: 'test'
+  ...
+# Subtest: A-02 · SP-062: тот же расход дважды даёт то же распределение
+ok 2 - A-02 · SP-062: тот же расход дважды даёт то же распределение
+  ---
+  duration_ms: 129.112933
+  type: 'test'
+  ...
+# Subtest: A-03 · SP-007,SP-062: распределение переживает перезапуск процесса
+ok 3 - A-03 · SP-007,SP-062: распределение переживает перезапуск процесса
+  ---
+  duration_ms: 413.883454
+  type: 'test'
+  ...
+# Subtest: A-04 · SP-062: порядок в запросе обратный порядку добавления — копейка всё равно первому добавленному
+not ok 4 - A-04 · SP-062: порядок в запросе обратный порядку добавления — копейка всё равно первому добавленному
+  ---
+  duration_ms: 125.355355
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-a.test.mjs:117:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-062: остаток раздаётся по порядку добавления в группу, а не по порядку в запросе
+    
+    3333 !== 3334
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 3334
+  actual: 3333
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-a.test.mjs:126:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: A-05 · SP-064,SP-019: одна копейка на троих → 0.01 / 0.00 / 0.00
+ok 5 - A-05 · SP-064,SP-019: одна копейка на троих → 0.01 / 0.00 / 0.00
+  ---
+  duration_ms: 116.052538
+  type: 'test'
+  ...
+# Subtest: A-06 · SP-062: остаток больше единицы раздаётся по одной, а не целиком первому
+ok 6 - A-06 · SP-062: остаток больше единицы раздаётся по одной, а не целиком первому
+  ---
+  duration_ms: 263.027636
+  type: 'test'
+  ...
+# Subtest: A-07 · SP-062: состав — подмножество группы, порядок считается по группе
+not ok 7 - A-07 · SP-062: состав — подмножество группы, порядок считается по группе
+  ---
+  duration_ms: 152.713958
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-a.test.mjs:162:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-062: копейка достаётся тому, кто раньше ДОБАВЛЕН В ГРУППУ, среди входящих в состав
+    
+    3333 !== 3334
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 3334
+  actual: 3333
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-a.test.mjs:175:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: A-08 · SP-016: нулевая сумма "0" и "0.00" отклоняется
+not ok 8 - A-08 · SP-016: нулевая сумма "0" и "0.00" отклоняется
+  ---
+  duration_ms: 114.893443
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-a.test.mjs:195:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-016: "0": статус 400 получен ВЕРНО, требование по сумме соблюдено. Красным тест делает форма тела ошибки: SP-101 требует {"error":{"code","message"}}, SP-103 — код VALIDATION_ERROR; получено {"error":"Сумма расхода должна быть больше нуля"}
+    + actual - expected
+    
+    + undefined
+    - 'VALIDATION_ERROR'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'VALIDATION_ERROR'
+  operator: 'strictEqual'
+  stack: |-
+    rejects (file:///home/claude/repo/tests/api/plan-a.test.mjs:190:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-a.test.mjs:197:3)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: A-09 · SP-017: отрицательная сумма отклоняется
+not ok 9 - A-09 · SP-017: отрицательная сумма отклоняется
+  ---
+  duration_ms: 116.900983
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-a.test.mjs:201:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-017: "-1.00": статус 400 получен ВЕРНО, требование по сумме соблюдено. Красным тест делает форма тела ошибки: SP-101 требует {"error":{"code","message"}}, SP-103 — код VALIDATION_ERROR; получено {"error":"Сумма расхода должна быть больше нуля"}
+    + actual - expected
+    
+    + undefined
+    - 'VALIDATION_ERROR'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'VALIDATION_ERROR'
+  operator: 'strictEqual'
+  stack: |-
+    rejects (file:///home/claude/repo/tests/api/plan-a.test.mjs:190:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-a.test.mjs:203:3)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: A-10 · SP-012: больше двух знаков после точки отклоняется
+not ok 10 - A-10 · SP-012: больше двух знаков после точки отклоняется
+  ---
+  duration_ms: 116.618697
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-a.test.mjs:206:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-012: "100.005": статус 400 получен ВЕРНО, требование по сумме соблюдено. Красным тест делает форма тела ошибки: SP-101 требует {"error":{"code","message"}}, SP-103 — код VALIDATION_ERROR; получено {"error":"Поле \"amount\" должно быть числом с не более чем 2 знаками после запятой"}
+    + actual - expected
+    
+    + undefined
+    - 'VALIDATION_ERROR'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'VALIDATION_ERROR'
+  operator: 'strictEqual'
+  stack: |-
+    rejects (file:///home/claude/repo/tests/api/plan-a.test.mjs:190:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-a.test.mjs:208:3)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: A-11 · SP-013: крайние пробелы в сумме отбрасываются
+ok 11 - A-11 · SP-013: крайние пробелы в сумме отбрасываются
+  ---
+  duration_ms: 115.440078
+  type: 'test'
+  ...
+# Subtest: A-12 · SP-014,SP-015,SP-112: запятая, экспонента, число вместо строки
+not ok 12 - A-12 · SP-014,SP-015,SP-112: запятая, экспонента, число вместо строки
+  ---
+  duration_ms: 111.443429
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-a.test.mjs:223:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-014: запятая как разделитель: ожидается 400, получено 200 {"expense":{"id":"exp_83ada0a5177743120e","groupId":"grp_2e7dc5e47e8340dd6c","description":"граница","amount":10000,"amountText":"100.00","currency":"RUB","category":"Транспорт","payerId":"usr_b363df2
+    
+    200 !== 400
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 400
+  actual: 200
+  operator: 'strictEqual'
+  stack: |-
+    rejects (file:///home/claude/repo/tests/api/plan-a.test.mjs:188:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-a.test.mjs:225:3)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: A-13 · SP-018: верхняя граница суммы 10000000.00
+not ok 13 - A-13 · SP-018: верхняя граница суммы 10000000.00
+  ---
+  duration_ms: 124.226546
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-a.test.mjs:230:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-018: превышение предела: ожидается 400, получено 200 {"expense":{"id":"exp_cd6d3b83b84cd9356d","groupId":"grp_5fb14d470a20650649","description":"граница","amount":1000000001,"amountText":"10000000.01","currency":"RUB","category":"Транспорт","payerId":"u
+    
+    200 !== 400
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 400
+  actual: 200
+  operator: 'strictEqual'
+  stack: |-
+    rejects (file:///home/claude/repo/tests/api/plan-a.test.mjs:188:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-a.test.mjs:239:3)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: A-14 · SP-021: нормализация представления — "100.5" и "1"
+ok 14 - A-14 · SP-021: нормализация представления — "100.5" и "1"
+  ---
+  duration_ms: 113.497694
+  type: 'test'
+  ...
+# Subtest: A-15 · SP-010,SP-076: целочисленность арифметики — три ловушки плавающей точки
+ok 15 - A-15 · SP-010,SP-076: целочисленность арифметики — три ловушки плавающей точки
+  ---
+  duration_ms: 122.538168
+  type: 'test'
+  ...
+# Subtest: A-16 · SP-068,SP-076: проценты 33/33/34 на 100.00
+ok 16 - A-16 · SP-068,SP-076: проценты 33/33/34 на 100.00
+  ---
+  duration_ms: 121.905119
+  type: 'test'
+  ...
+# Subtest: A-17 · SP-067: те же проценты на сумму, которая на них не делится
+ok 17 - A-17 · SP-067: те же проценты на сумму, которая на них не делится
+  ---
+  duration_ms: 118.047992
+  type: 'test'
+  ...
+# Subtest: A-18 · SP-067: остаток по наибольшей дробной части, а не первому по порядку
+ok 18 - A-18 · SP-067: остаток по наибольшей дробной части, а не первому по порядку
+  ---
+  duration_ms: 118.905303
+  type: 'test'
+  ...
+# Subtest: A-19 · SP-067: остаток уходит не к наибольшей доле и не к крайнему участнику
+ok 19 - A-19 · SP-067: остаток уходит не к наибольшей доле и не к крайнему участнику
+  ---
+  duration_ms: 120.291491
+  type: 'test'
+  ...
+# Subtest: A-20 · SP-066: проценты, не дающие ровно 100.00, отклоняются
+ok 20 - A-20 · SP-066: проценты, не дающие ровно 100.00, отклоняются
+  ---
+  duration_ms: 121.578062
+  type: 'test'
+  ...
+# Subtest: A-21 · SP-065: формат и диапазон отдельного процента — шесть отказов и один приём
+not ok 21 - A-21 · SP-065: формат и диапазон отдельного процента — шесть отказов и один приём
+  ---
+  duration_ms: 119.86979
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-a.test.mjs:347:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-065: запятая — ожидается 400, получено 200 {"expense":{"id":"exp_819f36139b8895038a","groupId":"grp_0045dac9281bc67c7b","description":"формат процента","amount":10000,"amountText":"100.00","currency":"RU
+    
+    200 !== 400
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 400
+  actual: 200
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-a.test.mjs:362:12)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: A-22 · SP-069,SP-071: ручное распределение, сумма частей совпадает
+ok 22 - A-22 · SP-069,SP-071: ручное распределение, сумма частей совпадает
+  ---
+  duration_ms: 121.108778
+  type: 'test'
+  ...
+# Subtest: A-23 · SP-071: расхождение ручных частей в одну копейку отклоняется
+ok 23 - A-23 · SP-071: расхождение ручных частей в одну копейку отклоняется
+  ---
+  duration_ms: 122.14177
+  type: 'test'
+  ...
+# Subtest: A-24 · SP-070: ручной ноль допускается
+ok 24 - A-24 · SP-070: ручной ноль допускается
+  ---
+  duration_ms: 121.320083
+  type: 'test'
+  ...
+# Subtest: A-25 · SP-070: отрицательная часть при верной общей сумме отклоняется
+ok 25 - A-25 · SP-070: отрицательная часть при верной общей сумме отклоняется
+  ---
+  duration_ms: 120.832342
+  type: 'test'
+  ...
+# Subtest: A-26 · SP-069,SP-012,SP-014: формат ручной части
+not ok 26 - A-26 · SP-069,SP-012,SP-014: формат ручной части
+  ---
+  duration_ms: 111.043066
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-a.test.mjs:417:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-069: часть задаётся в том же формате, что и сумма расхода (50,00); получено 200
+    
+    200 !== 400
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 400
+  actual: 200
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-a.test.mjs:424:12)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: A-27 · SP-026: расход в валюте, отличной от валюты группы, отклоняется
+not ok 27 - A-27 · SP-026: расход в валюте, отличной от валюты группы, отклоняется
+  ---
+  duration_ms: 110.869755
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-a.test.mjs:431:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-026: валюта расхода обязана совпадать с валютой группы, конвертация не выполняется; получено 200 {"expense":{"id":"exp_aeebb7d8fa5d4f70b1","groupId":"grp_1f6374deec551530b7","description":"чужая валюта","amount":10000,"amountText":"100.00","currency":"USD","category":"Транспорт","payerId":"usr_29
+    
+    200 !== 400
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 400
+  actual: 200
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-a.test.mjs:437:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: A-28 · SP-024,SP-027: валюта по умолчанию у группы и у расхода
+ok 28 - A-28 · SP-024,SP-027: валюта по умолчанию у группы и у расхода
+  ---
+  duration_ms: 77.342659
+  type: 'test'
+  ...
+# Subtest: A-29 · SP-022,SP-023: код валюты вне набора и в нижнем регистре
+not ok 29 - A-29 · SP-022,SP-023: код валюты вне набора и в нижнем регистре
+  ---
+  duration_ms: 40.376897
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-a.test.mjs:460:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-023: код вне набора RUB/USD/EUR обязан отклоняться, включая заведомо существующие валюты; получено 200
+    
+    200 !== 400
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 400
+  actual: 200
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-a.test.mjs:463:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: A-30 · SP-028: код валюты сопровождает каждую денежную величину ответа
+not ok 30 - A-30 · SP-028: код валюты сопровождает каждую денежную величину ответа
+  ---
+  duration_ms: 119.047681
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-a.test.mjs:470:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-028: КАЖДАЯ денежная величина в ответах API обязана сопровождаться кодом валюты — начисления тоже
+    
+    undefined !== 'USD'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'USD'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-a.test.mjs:480:12)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: A-20-NAMES · SP-020: денежная величина в двух видах — суффиксы Minor и Formatted
+not ok 31 - A-20-NAMES · SP-020: денежная величина в двух видах — суффиксы Minor и Formatted
+  ---
+  duration_ms: 118.295585
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-a.test.mjs:485:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-020: сумма обязана присутствовать целым числом минимальных единиц в поле с суффиксом Minor
+    + actual - expected
+    
+    + 'undefined'
+    - 'number'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'number'
+  actual: 'undefined'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-a.test.mjs:493:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: A-31 · SP-051: плательщик — участник другой группы
+ok 32 - A-31 · SP-051: плательщик — участник другой группы
+  ---
+  duration_ms: 238.763185
+  type: 'test'
+  ...
+# Subtest: A-32 · SP-052: чужой участник, пустой состав, несуществующий идентификатор
+ok 33 - A-32 · SP-052: чужой участник, пустой состав, несуществующий идентификатор
+  ---
+  duration_ms: 238.710155
+  type: 'test'
+  ...
+# Subtest: A-33 · SP-053: повтор участника в составе отклоняется
+ok 34 - A-33 · SP-053: повтор участника в составе отклоняется
+  ---
+  duration_ms: 120.061469
+  type: 'test'
+  ...
+# Subtest: A-34 · SP-054: длина описания 140 / 141 / пустое, счёт относительный (правка D-39)
+not ok 35 - A-34 · SP-054: длина описания 140 / 141 / пустое, счёт относительный (правка D-39)
+  ---
+  duration_ms: 122.216639
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-a.test.mjs:540:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-054: описание длиной 141 обязано отклоняться; получено 200
+    
+    200 !== 400
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 400
+  actual: 200
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-a.test.mjs:553:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: A-35 · SP-055: плательщик не обязан входить в состав распределения
+ok 36 - A-35 · SP-055: плательщик не обязан входить в состав распределения
+  ---
+  duration_ms: 119.336299
+  type: 'test'
+  ...
+# Subtest: A-36 · SP-056: список расходов возвращается от старых к новым
+not ok 37 - A-36 · SP-056: список расходов возвращается от старых к новым
+  ---
+  duration_ms: 120.697818
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-a.test.mjs:577:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-056: расходы обязаны возвращаться в порядке добавления, от старых к новым
+    + actual - expected
+    
+      [
+    +   'exp_9770abca461cdb7fc9',
+    +   'exp_e6095f7446620e8ecd',
+        'exp_e8b5fb250c801e6bfe',
+    -   'exp_e6095f7446620e8ecd',
+    -   'exp_9770abca461cdb7fc9'
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 'exp_e8b5fb250c801e6bfe'
+    1: 'exp_e6095f7446620e8ecd'
+    2: 'exp_9770abca461cdb7fc9'
+  actual:
+    0: 'exp_9770abca461cdb7fc9'
+    1: 'exp_e6095f7446620e8ecd'
+    2: 'exp_e8b5fb250c801e6bfe'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-a.test.mjs:591:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: A-37 · SP-057,SP-058,SP-109: удаление расхода и повторное удаление
+not ok 38 - A-37 · SP-057,SP-058,SP-109: удаление расхода и повторное удаление
+  ---
+  duration_ms: 126.294974
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-a.test.mjs:595:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-109: успешное удаление обязано возвращать 204; получено 200
+    
+    200 !== 204
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 204
+  actual: 200
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-a.test.mjs:604:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: A-38 · SP-059: расход в несуществующую группу — «не найдено»
+ok 39 - A-38 · SP-059: расход в несуществующую группу — «не найдено»
+  ---
+  duration_ms: 120.474669
+  type: 'test'
+  ...
+# Subtest: A-39 · SP-060,SP-111: неизвестный способ распределения и его отсутствие
+ok 40 - A-39 · SP-060,SP-111: неизвестный способ распределения и его отсутствие
+  ---
+  duration_ms: 119.923915
+  type: 'test'
+  ...
+# Subtest: A-40 · SP-072,SP-074,SP-075: набор категорий, значение по умолчанию, возврат при чтении
+not ok 41 - A-40 · SP-072,SP-074,SP-075: набор категорий, значение по умолчанию, возврат при чтении
+  ---
+  duration_ms: 121.908589
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-a.test.mjs:643:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-074: при отсутствии поля категории обязана подставляться other
+    
+    'Прочее' !== 'other'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'other'
+  actual: 'Прочее'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-a.test.mjs:659:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: A-41 · SP-073: категория вне набора отклоняется
+not ok 42 - A-41 · SP-073: категория вне набора отклоняется
+  ---
+  duration_ms: 120.491167
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-a.test.mjs:663:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-073: категория вне набора обязана отклоняться с VALIDATION_ERROR; получено 200
+    
+    200 !== 400
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 400
+  actual: 200
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-a.test.mjs:669:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: A-47 · SP-004,SP-110: полный состав полей расхода и игнорирование неизвестных полей
+ok 43 - A-47 · SP-004,SP-110: полный состав полей расхода и игнорирование неизвестных полей
+  ---
+  duration_ms: 123.499291
+  type: 'test'
+  ...
+# Subtest: A-48 · SP-026,SP-152: PUT с валютой, отличной от валюты группы
+not ok 44 - A-48 · SP-026,SP-152: PUT с валютой, отличной от валюты группы
+  ---
+  duration_ms: 143.276542
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-a.test.mjs:729:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-026 + SP-152: к изменяемому расходу обязаны применяться те же правила проверки, что при создании (currency USD в рублёвой группе); получено 200 {"expense":{"id":"exp_98d3814a9dd0da39f7","groupId":"grp_d142dedb3862638a21","description":"изменённый","amount":9000,"amountText":"90.00","currency":"USD","category":"Транспорт","payerId":"usr_5ba969
+    
+    200 !== 400
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 400
+  actual: 200
+  operator: 'strictEqual'
+  stack: |-
+    putMatrix (file:///home/claude/repo/tests/api/plan-a.test.mjs:716:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-a.test.mjs:730:3)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: A-49 · SP-073,SP-152: PUT с категорией вне набора
+not ok 45 - A-49 · SP-073,SP-152: PUT с категорией вне набора
+  ---
+  duration_ms: 120.073144
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-a.test.mjs:733:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-073 + SP-152: к изменяемому расходу обязаны применяться те же правила проверки, что при создании (category groceries); получено 200 {"expense":{"id":"exp_539783fc6d2f901340","groupId":"grp_e4e76e09b2fa348cc9","description":"изменённый","amount":9000,"amountText":"90.00","currency":"RUB","category":"groceries","payerId":"usr_0a4a94
+    
+    200 !== 400
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 400
+  actual: 200
+  operator: 'strictEqual'
+  stack: |-
+    putMatrix (file:///home/claude/repo/tests/api/plan-a.test.mjs:716:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-a.test.mjs:734:3)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: A-50 · SP-060,SP-152: PUT с неизвестным способом распределения
+ok 46 - A-50 · SP-060,SP-152: PUT с неизвестным способом распределения
+  ---
+  duration_ms: 121.224474
+  type: 'test'
+  ...
+# Subtest: A-51 · SP-052,SP-152: PUT с чужим участником в составе
+ok 47 - A-51 · SP-052,SP-152: PUT с чужим участником в составе
+  ---
+  duration_ms: 238.465851
+  type: 'test'
+  ...
+# Subtest: A-52 · SP-066,SP-152: PUT с процентами, не дающими 100.00
+ok 48 - A-52 · SP-066,SP-152: PUT с процентами, не дающими 100.00
+  ---
+  duration_ms: 127.506754
+  type: 'test'
+  ...
+# Subtest: A-53 · SP-150,SP-151: PUT меняет описание и категорию и не затирает валюту
+ok 49 - A-53 · SP-150,SP-151: PUT меняет описание и категорию и не затирает валюту
+  ---
+  duration_ms: 83.791499
+  type: 'test'
+  ...
+# Subtest: B-01 · SP-080,SP-081: балансы после неделимого расхода
+ok 50 - B-01 · SP-080,SP-081: балансы после неделимого расхода
+  ---
+  duration_ms: 311.594455
+  type: 'test'
+  ...
+# Subtest: B-02 · SP-082,SP-083,SP-096: группа без расходов даёт нули, а не пустоту
+not ok 51 - B-02 · SP-082,SP-083,SP-096: группа без расходов даёт нули, а не пустоту
+  ---
+  duration_ms: 107.962598
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-b.test.mjs:92:1'
+  failureType: 'testCodeFailure'
+  error: 'SP-083: группа без расходов обязана возвращать нулевые балансы для всех участников, а не пустой список'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: ~
+  actual: ~
+  operator: 'notStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-b.test.mjs:96:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: B-03 · SP-082: участник, не задетый ни одним расходом, присутствует в балансах
+ok 52 - B-03 · SP-082: участник, не задетый ни одним расходом, присутствует в балансах
+  ---
+  duration_ms: 125.672641
+  type: 'test'
+  ...
+# Subtest: B-04 · SP-091,SP-163: состав записи долга — стороны, сумма, валюта, статус
+not ok 53 - B-04 · SP-091,SP-163: состав записи долга — стороны, сумма, валюта, статус
+  ---
+  duration_ms: 122.22095
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-b.test.mjs:118:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-091 + SP-163: каждый долг обязан содержать СТАТУС; остаток больше нуля → pending
+    + actual - expected
+    
+    + undefined
+    - 'pending'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'pending'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-b.test.mjs:126:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: B-05 · SP-090,SP-094: долги гасят балансы без остатка в копейку
+ok 54 - B-05 · SP-090,SP-094: долги гасят балансы без остатка в копейку
+  ---
+  duration_ms: 121.609593
+  type: 'test'
+  ...
+# Subtest: B-06 · SP-090,SP-161: взаимозачёт встречных долгов, двое участников
+ok 55 - B-06 · SP-090,SP-161: взаимозачёт встречных долгов, двое участников
+  ---
+  duration_ms: 84.058525
+  type: 'test'
+  ...
+# Subtest: B-07 · SP-093: взаимозачёт по кругу, трое участников
+ok 56 - B-07 · SP-093: взаимозачёт по кругу, трое участников
+  ---
+  duration_ms: 123.652134
+  type: 'test'
+  ...
+# Subtest: B-08 · SP-093: две независимые пары не дробятся на четыре долга
+ok 57 - B-08 · SP-093: две независимые пары не дробятся на четыре долга
+  ---
+  duration_ms: 134.584495
+  type: 'test'
+  ...
+# Subtest: B-09 · SP-093: верхняя граница n−1 не превышается
+ok 58 - B-09 · SP-093: верхняя граница n−1 не превышается
+  ---
+  duration_ms: 193.323318
+  type: 'test'
+  ...
+# Subtest: B-10 · SP-095: долга самому себе нет
+ok 59 - B-10 · SP-095: долга самому себе нет
+  ---
+  duration_ms: 115.197496
+  type: 'test'
+  ...
+# Subtest: B-11 · SP-167: отметка оплаченным вырожденной пары «сам себе» → NOT_FOUND
+not ok 60 - B-11 · SP-167: отметка оплаченным вырожденной пары «сам себе» → NOT_FOUND
+  ---
+  duration_ms: 118.921477
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-b.test.mjs:219:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-167: отметка оплаченным по паре без задолженности обязана возвращать NOT_FOUND; получено 400 {"error":"Плательщик и получатель совпадают"}
+    
+    400 !== 404
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 404
+  actual: 400
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-b.test.mjs:222:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: B-12 · SP-164: пара с нулевым остатком и без погашений в списке отсутствует
+ok 61 - B-12 · SP-164: пара с нулевым остатком и без погашений в списке отсутствует
+  ---
+  duration_ms: 119.878183
+  type: 'test'
+  ...
+# Subtest: B-13 · SP-162,SP-163: три состояния пары в одном списке — pending, paid, отсутствие
+not ok 62 - B-13 · SP-162,SP-163: три состояния пары в одном списке — pending, paid, отсутствие
+  ---
+  duration_ms: 115.338624
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-b.test.mjs:236:1'
+  failureType: 'testCodeFailure'
+  error: 'SP-162: список долгов обязан включать и pending, и paid — погашенная пара обязана остаться в списке'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-b.test.mjs:246:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: B-14 · SP-165,SP-168: погашение на полный остаток меняет ровно две стороны
+not ok 63 - B-14 · SP-165,SP-168: погашение на полный остаток меняет ровно две стороны
+  ---
+  duration_ms: 121.024215
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-b.test.mjs:258:1'
+  failureType: 'testCodeFailure'
+  error: 'SP-162: список долгов обязан включать и pending, и paid — после погашения пара обязана остаться в списке со статусом paid, а не исчезнуть из него'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-b.test.mjs:275:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: B-15 · SP-081,SP-169: сумма балансов ровно ноль при неделимых суммах и погашении
+ok 64 - B-15 · SP-081,SP-169: сумма балансов ровно ноль при неделимых суммах и погашении
+  ---
+  duration_ms: 125.141393
+  type: 'test'
+  ...
+# Subtest: B-16 · SP-166: повторная отметка уже оплаченного долга → 409 CONFLICT
+not ok 65 - B-16 · SP-166: повторная отметка уже оплаченного долга → 409 CONFLICT
+  ---
+  duration_ms: 70.038161
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-b.test.mjs:297:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-166: повторная отметка уже оплаченного долга обязана отклоняться со статусом 409; получено 200 {"settlement":{"id":"stl_56bdd6e0f325fc9857","groupId":"grp_fe6efd3bddea4909b4","fromUserId":"usr_e5e90e5bfeff899a99","fromUserName":"Борис","toUserId":"usr_a1d136568df441a0f4","toUserName":"Аня","amo
+    
+    200 !== 409
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 409
+  actual: 200
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-b.test.mjs:306:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: B-17 · SP-167: отметка оплаченным пары без задолженности → 404 NOT_FOUND
+not ok 66 - B-17 · SP-167: отметка оплаченным пары без задолженности → 404 NOT_FOUND
+  ---
+  duration_ms: 119.936064
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-b.test.mjs:315:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-167: по паре, у которой нет задолженности, отметка обязана возвращать NOT_FOUND; получено 200 {"settlement":{"id":"stl_251b8b166e187de27b","groupId":"grp_f2cebf506acf4b56f5","fromUserId":"usr_c63edb64bc58db3d7d","fromUserName":"Вера","toUserId":"usr_3281db5ee6bd81d4a0","toUserName":"Борис","am
+    
+    200 !== 404
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 404
+  actual: 200
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-b.test.mjs:320:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: B-18 · SP-170: погашение необратимо — отмены не предусмотрено
+not ok 67 - B-18 · SP-170: погашение необратимо — отмены не предусмотрено
+  ---
+  duration_ms: 78.553429
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-b.test.mjs:324:1'
+  failureType: 'testCodeFailure'
+  error: 'SP-170: погашение обязано быть необратимым в этой итерации — путь отмены не предусмотрен; получено 200 {"ok":true}'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-b.test.mjs:334:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: B-19 · SP-172,SP-084: пересчёт после изменения суммы, погашение переживает пересчёт
+ok 68 - B-19 · SP-172,SP-084: пересчёт после изменения суммы, погашение переживает пересчёт
+  ---
+  duration_ms: 86.809584
+  type: 'test'
+  ...
+# Subtest: B-20 · SP-163,SP-172: оплаченный долг снова становится pending после изменения расхода
+not ok 69 - B-20 · SP-163,SP-172: оплаченный долг снова становится pending после изменения расхода
+  ---
+  duration_ms: 85.058884
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-b.test.mjs:368:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-163: остаток снова больше нуля → статус обязан вернуться в pending
+    + actual - expected
+    
+    + undefined
+    - 'pending'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'pending'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-b.test.mjs:378:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: B-21 · SP-173: смена направления долга после изменения плательщика
+not ok 70 - B-21 · SP-173: смена направления долга после изменения плательщика
+  ---
+  duration_ms: 79.621947
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-b.test.mjs:382:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-173: со статусом pending
+    + actual - expected
+    
+    + undefined
+    - 'pending'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'pending'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-b.test.mjs:392:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: B-22 · SP-171,SP-173: смена направления при сохранённом погашении
+ok 71 - B-22 · SP-171,SP-173: смена направления при сохранённом погашении
+  ---
+  duration_ms: 82.539397
+  type: 'test'
+  ...
+# Subtest: B-23 · SP-057,SP-171: пересчёт после удаления, погашение переживает
+ok 72 - B-23 · SP-057,SP-171: пересчёт после удаления, погашение переживает
+  ---
+  duration_ms: 93.068878
+  type: 'test'
+  ...
+# Subtest: B-24 · SP-057,SP-084,SP-096: удаление единственного расхода обнуляет балансы
+not ok 73 - B-24 · SP-057,SP-084,SP-096: удаление единственного расхода обнуляет балансы
+  ---
+  duration_ms: 119.459347
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-b.test.mjs:432:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-082: после удаления расхода балансы обязаны возвращаться для всех участников, а не исчезать
+    
+    0 !== 3
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 3
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-b.test.mjs:438:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: B-25 · SP-167,SP-172: оплата долга, исчезнувшего после изменения расхода
+not ok 74 - B-25 · SP-167,SP-172: оплата долга, исчезнувшего после изменения расхода
+  ---
+  duration_ms: 87.776593
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-b.test.mjs:448:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-167: долга Борис → Аня больше нет, отметка обязана вернуть NOT_FOUND, а не провести погашение по устаревшему представлению; получено 200 {"settlement":{"id":"stl_0b0e7b04f1666c60a7","groupId":"grp_44f811fc7b786a205b","fromUserId":"usr_919a4e6d2d373c3461","fromUserName":"Борис","toUserId":"usr_c0832ef6fab0cd7f06","toUserName":"Аня","amo
+    
+    200 !== 404
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 404
+  actual: 200
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-b.test.mjs:455:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: B-26 · SP-167,SP-171,SP-113: оплата долга, исчезнувшего после удаления расхода
+not ok 75 - B-26 · SP-167,SP-171,SP-113: оплата долга, исчезнувшего после удаления расхода
+  ---
+  duration_ms: 85.21633
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-b.test.mjs:459:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-167: после удаления расхода задолженности нет, отметка обязана вернуть NOT_FOUND; получено 200
+    
+    200 !== 404
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 404
+  actual: 200
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-b.test.mjs:466:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: B-27 · SP-165: погашается текущий остаток, а не увиденный ранее
+not ok 76 - B-27 · SP-165: погашается текущий остаток, а не увиденный ранее
+  ---
+  duration_ms: 86.548798
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-b.test.mjs:473:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-165: отметка оплаченным обязана создавать погашение на полную сумму ТЕКУЩЕГО остатка (20.00), а не на увиденную ранее (50.00); переплата оставила бы Аню в минусе
+    
+    -3000 !== 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: -3000
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-b.test.mjs:483:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: B-28 · SP-156,SP-084: отклонённое изменение не трогает балансы и долги
+ok 77 - B-28 · SP-156,SP-084: отклонённое изменение не трогает балансы и долги
+  ---
+  duration_ms: 120.696114
+  type: 'test'
+  ...
+# Subtest: B-29 · SP-154: изменение несуществующего расхода не трогает балансы
+ok 78 - B-29 · SP-154: изменение несуществующего расхода не трогает балансы
+  ---
+  duration_ms: 122.274355
+  type: 'test'
+  ...
+# Subtest: B-30 · SP-155,SP-151,SP-093: изменение сохраняет идентификатор и позицию и не удваивает учёт
+ok 79 - B-30 · SP-155,SP-151,SP-093: изменение сохраняет идентификатор и позицию и не удваивает учёт
+  ---
+  duration_ms: 121.776586
+  type: 'test'
+  ...
+# Subtest: B-31 · SP-092,SP-064: долг в одну копейку и отсутствие нулевых pending
+ok 80 - B-31 · SP-092,SP-064: долг в одну копейку и отсутствие нулевых pending
+  ---
+  duration_ms: 116.326876
+  type: 'test'
+  ...
+# Subtest: B-38 · SP-081,SP-090,SP-094: percent доходит до балансов и долгов
+ok 81 - B-38 · SP-081,SP-090,SP-094: percent доходит до балансов и долгов
+  ---
+  duration_ms: 114.199239
+  type: 'test'
+  ...
+# Subtest: C-01 · SP-145,SP-116,SP-117: чужая группа по прямому идентификатору — корень группы
+not ok 82 - C-01 · SP-145,SP-116,SP-117: чужая группа по прямому идентификатору — корень группы
+  ---
+  duration_ms: 429.831383
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-c.test.mjs:176:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-116: обращение к группе чужого владельца обязано возвращать 403 FORBIDDEN; получено 404. 404 скрывает факт существования группы — это безопаснее, но расходится с оракулом (спорное место 1 плана C)
+    
+    404 !== 403
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 403
+  actual: 404
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-c.test.mjs:186:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: C-02 · SP-146: чужая группа — все вложенные ЧИТАЮЩИЕ пути
+not ok 83 - C-02 · SP-146: чужая группа — все вложенные ЧИТАЮЩИЕ пути
+  ---
+  duration_ms: 244.02825
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-c.test.mjs:192:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-146: проверка владения обязана применяться ко ВСЕМ вложенным путям с кодом 403 (SP-116); фактические статусы 404, 404, 404, 404
+    + actual - expected
+    
+      [
+    +   404,
+    +   404,
+    +   404,
+    +   404
+    -   403,
+    -   403,
+    -   403,
+    -   403
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 403
+    1: 403
+    2: 403
+    3: 403
+  actual:
+    0: 404
+    1: 404
+    2: 404
+    3: 404
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-c.test.mjs:214:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-03 · SP-146: чужая группа — все вложенные ИЗМЕНЯЮЩИЕ пути
+not ok 84 - C-03 · SP-146: чужая группа — все вложенные ИЗМЕНЯЮЩИЕ пути
+  ---
+  duration_ms: 254.979712
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-c.test.mjs:219:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-116: отказ по чужой группе обязан быть 403 FORBIDDEN; фактические статусы 404, 404, 404, 404, 404, 404
+    + actual - expected
+    
+      [
+    +   404,
+    +   404,
+    +   404,
+    +   404,
+    +   404,
+    +   404
+    -   403,
+    -   403,
+    -   403,
+    -   403,
+    -   403,
+    -   403
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 403
+    1: 403
+    2: 403
+    3: 403
+    4: 403
+    5: 403
+  actual:
+    0: 404
+    1: 404
+    2: 404
+    3: 404
+    4: 404
+    5: 404
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-c.test.mjs:266:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-04 · SP-117: содержимое отказа по чужой группе не раскрывает данные
+not ok 85 - C-04 · SP-117: содержимое отказа по чужой группе не раскрывает данные
+  ---
+  duration_ms: 245.169673
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-c.test.mjs:270:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-116: ожидался 403 FORBIDDEN, получено 404
+    
+    404 !== 403
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 403
+  actual: 404
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-c.test.mjs:280:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-05 · SP-116 против SP-104: чужая существующая против несуществующей
+not ok 86 - C-05 · SP-116 против SP-104: чужая существующая против несуществующей
+  ---
+  duration_ms: 242.85818
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-c.test.mjs:283:1'
+  failureType: 'testCodeFailure'
+  error: 'SP-116 против SP-104: чужая существующая группа (403) и несуществующая (404) обязаны различаться статусом. Здесь оба ответа — 404. Это безопаснее (факт существования не раскрывается) и прямо описано в app/README.md как решение автора, но расходится с оракулом; см. спорное место 1 плана C.'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 404
+  actual: 404
+  operator: 'notStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-c.test.mjs:296:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-06 · SP-148,SP-147: идентификатор участника не даёт доступа, неизвестный пользователь обслуживается
+not ok 87 - C-06 · SP-148,SP-147: идентификатор участника не даёт доступа, неизвестный пользователь обслуживается
+  ---
+  duration_ms: 127.375763
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-c.test.mjs:305:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-147: ранее не встречавшийся идентификатор пользователя обязан обслуживаться как обычный — у него просто нет групп; получено 401. Приложение ввело регистрацию, которой оракул не предусматривал: неизвестная идентификация отвергается, а не обслуживается пустым списком
+    
+    401 !== 200
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 200
+  actual: 401
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-c.test.mjs:319:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-07 · SP-035,SP-144,SP-147: список групп — изоляция владельцев и новый пользователь
+ok 88 - C-07 · SP-035,SP-144,SP-147: список групп — изоляция владельцев и новый пользователь
+  ---
+  duration_ms: 273.840727
+  type: 'test'
+  ...
+# Subtest: C-08 · SP-140,SP-141,SP-142,SP-115,SP-114: идентификация отсутствует, пуста, из пробелов; health
+not ok 89 - C-08 · SP-140,SP-141,SP-142,SP-115,SP-114: идентификация отсутствует, пуста, из пробелов; health
+  ---
+  duration_ms: 124.272309
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-c.test.mjs:350:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-140: оракул требует идентификации заголовком X-User-Id. Приложение его не обслуживает — идентификация построена на регистрации и Bearer-токене (получено 401). Расхождение с оракулом, фиксируется один раз; сам механизм разграничения при этом работает
+    
+    401 !== 200
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 200
+  actual: 401
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-c.test.mjs:374:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-09 · SP-143,SP-110: владелец фиксируется при создании и неизменяем
+ok 90 - C-09 · SP-143,SP-110: владелец фиксируется при создании и неизменяем
+  ---
+  duration_ms: 78.433822
+  type: 'test'
+  ...
+# Subtest: C-10 · SP-030,SP-001,SP-109: создание группы — код, поля, состав
+not ok 91 - C-10 · SP-030,SP-001,SP-109: создание группы — код, поля, состав
+  ---
+  duration_ms: 39.934998
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-c.test.mjs:407:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-109: успешное создание обязано возвращать 201; получено 200. Приложение отвечает 200 на все успешные создания — расхождение с оракулом, вердикт по SP-109 даёт C-29
+    
+    200 !== 201
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 201
+  actual: 200
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-c.test.mjs:424:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-11 · SP-031,SP-032,SP-033: название группы — длина, пробелы, обрезка
+not ok 92 - C-11 · SP-031,SP-032,SP-033: название группы — длина, пробелы, обрезка
+  ---
+  duration_ms: 53.394682
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-c.test.mjs:430:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-031: название длиннее 60 символов обязано отклоняться; получено 200 — верхней границы длины нет
+    
+    200 !== 400
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 400
+  actual: 200
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-c.test.mjs:449:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-12 · SP-034,SP-104: запрос несуществующей группы
+ok 93 - C-12 · SP-034,SP-104: запрос несуществующей группы
+  ---
+  duration_ms: 121.225613
+  type: 'test'
+  ...
+# Subtest: C-13 · SP-002: валюта группы задаётся при создании и неизменяема
+not ok 94 - C-13 · SP-002: валюта группы задаётся при создании и неизменяема
+  ---
+  duration_ms: 81.31354
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-c.test.mjs:483:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-002: валюта группы обязана быть неизменяемой после создания; PATCH вернул 200 и валюта стала RUB
+    
+    'RUB' !== 'EUR'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'EUR'
+  actual: 'RUB'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-c.test.mjs:495:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-14 · SP-040,SP-003,SP-005,SP-006: добавление участников — ответ, порядок, идентификаторы
+not ok 95 - C-14 · SP-040,SP-003,SP-005,SP-006: добавление участников — ответ, порядок, идентификаторы
+  ---
+  duration_ms: 121.526091
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-c.test.mjs:512:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-109: добавление участника — успешное создание, обязан быть 201; получено 200
+    
+    200 !== 201
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 201
+  actual: 200
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-c.test.mjs:539:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-15 · SP-041: длина имени участника — границы 1 и 40
+not ok 96 - C-15 · SP-041: длина имени участника — границы 1 и 40
+  ---
+  duration_ms: 198.651398
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-c.test.mjs:542:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-041: имя длиннее 40 символов обязано отклоняться; получено 200 — верхней границы длины имени нет
+    
+    200 !== 400
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 400
+  actual: 200
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-c.test.mjs:561:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-16 · SP-042: уникальность имён участников БЕЗ УЧЁТА РЕГИСТРА
+not ok 97 - C-16 · SP-042: уникальность имён участников БЕЗ УЧЁТА РЕГИСТРА
+  ---
+  duration_ms: 196.981322
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-c.test.mjs:567:1'
+  failureType: 'testCodeFailure'
+  error: 'SP-042: имена участников обязаны быть уникальны в пределах группы без учёта регистра; «аня», «АНЯ», «аНя» при уже существующей «Аня» дали 200, 200, 200 — все приняты. Приложение проверяет уникальность по email учётной записи, а не по имени'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-c.test.mjs:585:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-17 · SP-042,SP-041: уникальность имён БЕЗ УЧЁТА КРАЙНИХ ПРОБЕЛОВ
+not ok 98 - C-17 · SP-042,SP-041: уникальность имён БЕЗ УЧЁТА КРАЙНИХ ПРОБЕЛОВ
+  ---
+  duration_ms: 191.196916
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-c.test.mjs:593:1'
+  failureType: 'testCodeFailure'
+  error: 'SP-042: имена, различающиеся только крайними пробелами и регистром, обязаны отвергаться как занятые; получено 200, 200, 200'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-c.test.mjs:612:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-18 · SP-043: предел в 20 участников
+not ok 99 - C-18 · SP-043: предел в 20 участников
+  ---
+  duration_ms: 836.38094
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-c.test.mjs:618:1'
+  failureType: 'testCodeFailure'
+  error: 'SP-043: добавление двадцать первого участника обязано быть ошибкой; получено 200 — предела нет'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-c.test.mjs:634:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-19 · SP-044,SP-109,SP-047: удаление свободного участника
+not ok 100 - C-19 · SP-044,SP-109,SP-047: удаление свободного участника
+  ---
+  duration_ms: 181.321913
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-c.test.mjs:645:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-109: успешное удаление обязано возвращать 204 с пустым телом; получено 200
+    
+    200 !== 204
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 204
+  actual: 200
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-c.test.mjs:669:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-20 · SP-045,SP-105: удаление участника с непогашенными долгами
+not ok 101 - C-20 · SP-045,SP-105: удаление участника с непогашенными долгами
+  ---
+  duration_ms: 154.196987
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-c.test.mjs:674:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-045,SP-105: конфликт состояния обязан возвращать 409 CONFLICT; получено 400, 400, 400
+    + actual - expected
+    
+      [
+    +   400,
+    +   400,
+    +   400
+    -   409,
+    -   409,
+    -   409
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 409
+    1: 409
+    2: 409
+  actual:
+    0: 400
+    1: 400
+    2: 400
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-c.test.mjs:695:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-21 · SP-045,SP-044: удаление участника — стороны погашения
+not ok 102 - C-21 · SP-045,SP-044: удаление участника — стороны погашения
+  ---
+  duration_ms: 169.681093
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-c.test.mjs:700:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-045 (редакция 1.1): стороны проведённого погашения не обязаны удаляться
+    + actual - expected
+    
+      [
+        'Аня',
+    -   'Борис',
+        'Виктор'
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 'Аня'
+    1: 'Борис'
+    2: 'Виктор'
+  actual:
+    0: 'Аня'
+    1: 'Виктор'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-c.test.mjs:713:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-22 · SP-046,SP-047,SP-104: «не найдено» на несуществующем участнике и группе
+ok 103 - C-22 · SP-046,SP-047,SP-104: «не найдено» на несуществующем участнике и группе
+  ---
+  duration_ms: 296.382394
+  type: 'test'
+  ...
+# Subtest: C-23 · SP-030,SP-083,SP-180: группа без расходов — пустые списки, а не отказы
+not ok 104 - C-23 · SP-030,SP-083,SP-180: группа без расходов — пустые списки, а не отказы
+  ---
+  duration_ms: 48.088347
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-c.test.mjs:753:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-180: история — это расходы и погашения в одном списке. На группе без расходов и погашений она обязана быть пуста; фактически в ней 1 записи вида "group.created" — приложение ведёт журнал действий пользователя, а не историю операций
+    + actual - expected
+    
+    + [
+    +   {
+    +     createdAt: '2026-08-27T21:57:09.962Z',
+    +     id: 'act_f5b241a325a033cc0b',
+    +     text: 'Аня создал(а) группу «Пустая»',
+    +     type: 'group.created',
+    +     userId: 'usr_2f6dff920042699c08',
+    +     userName: 'Аня'
+    +   }
+    + ]
+    - []
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual:
+    0:
+      id: 'act_f5b241a325a033cc0b'
+      type: 'group.created'
+      text: 'Аня создал(а) группу «Пустая»'
+      userId: 'usr_2f6dff920042699c08'
+      userName: 'Аня'
+      createdAt: '2026-08-27T21:57:09.962Z'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-c.test.mjs:775:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-24 · SP-082,SP-083,SP-095: группа из одного участника — нули, а не пустой список
+ok 105 - C-24 · SP-082,SP-083,SP-095: группа из одного участника — нули, а не пустой список
+  ---
+  duration_ms: 54.960674
+  type: 'test'
+  ...
+# Subtest: C-25 · SP-100,SP-101,SP-102,SP-108: форма ответа и тело ошибки (единственная проверка формы)
+not ok 106 - C-25 · SP-100,SP-101,SP-102,SP-108: форма ответа и тело ошибки (единственная проверка формы)
+  ---
+  duration_ms: 127.641575
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-c.test.mjs:810:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-101: тело ошибки обязано иметь вид {"error":{"code":"...","message":"..."}}. Приложение отвечает плоским {"error":"текст"} — кода ошибки нет вовсе. Это ОДНО расхождение, и по соглашению С-C2 оно фиксируется здесь один раз, а не красит собой каждый кейс зоны
+    + actual - expected
+    
+    + [
+    +   'без названия: {"error":"Поле \\"name\\" обязательно"}',
+    +   'несуществующая группа: {"error":"Группа не найдена"}',
+    +   'повторный участник: {"error":"Пользователь уже в группе"}'
+    + ]
+    - []
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual:
+    0: 'без названия: {"error":"Поле \\"name\\" обязательно"}'
+    1: 'несуществующая группа: {"error":"Группа не найдена"}'
+    2: 'повторный участник: {"error":"Пользователь уже в группе"}'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-c.test.mjs:838:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-26 · SP-106,SP-113: некорректный JSON и живучесть процесса
+ok 107 - C-26 · SP-106,SP-113: некорректный JSON и живучесть процесса
+  ---
+  duration_ms: 167.253696
+  type: 'test'
+  ...
+# Subtest: C-27 · SP-107,SP-120: неподдерживаемый метод на существующем пути
+not ok 108 - C-27 · SP-107,SP-120: неподдерживаемый метод на существующем пути
+  ---
+  duration_ms: 109.286702
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-c.test.mjs:876:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-120: DELETE /api/groups/{gid} в таблице путей отсутствует — группа не обязана удаляться этим методом (ответ 200)
+    
+    404 !== 200
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 200
+  actual: 404
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-c.test.mjs:889:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-28 · SP-110,SP-111,SP-112: неизвестные поля, отсутствующие поля, неверные типы
+ok 109 - C-28 · SP-110,SP-111,SP-112: неизвестные поля, отсутствующие поля, неверные типы
+  ---
+  duration_ms: 78.111454
+  type: 'test'
+  ...
+# Subtest: C-29 · SP-109: коды успешных ответов 201 / 200 / 204 (вердикт по SP-109)
+not ok 110 - C-29 · SP-109: коды успешных ответов 201 / 200 / 204 (вердикт по SP-109)
+  ---
+  duration_ms: 89.25325
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-c.test.mjs:935:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-109: успешное создание обязано возвращать 201; получено 200 и 200 — приложение отвечает 200 на все создания
+    + actual - expected
+    
+      [
+    +   200,
+    +   200
+    -   201,
+    -   201
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 201
+    1: 201
+  actual:
+    0: 200
+    1: 200
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-c.test.mjs:956:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-30 · SP-121: неизвестный путь под /api/ — JSON, а не HTML
+ok 111 - C-30 · SP-121: неизвестный путь под /api/ — JSON, а не HTML
+  ---
+  duration_ms: 115.680411
+  type: 'test'
+  ...
+# Subtest: C-31 · SP-120: таблица путей отвечает целиком
+not ok 112 - C-31 · SP-120: таблица путей отвечает целиком
+  ---
+  duration_ms: 177.73225
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-c.test.mjs:981:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-120: приложение обязано обслуживать все пути таблицы. Не обслуживаются вовсе (ни одним методом): GET /api/health; POST /api/groups/{gid}/participants; DELETE /api/groups/{gid}/participants/{pid}; GET /api/groups/{gid}/debts; POST /api/groups/{gid}/debts/{from}/{to}/pay; GET /api/groups/{gid}/transactions. Функции при этом есть — они живут по другим путям (участники → /members, история → /activity, отметка оплаты → /settlements, долги → поле debts[] внутри /balances), кроме /api/health, у которого замены нет. Расхождение с оракулом по именам путей плюс отсутствующая проверка живости; по соглашению С-C1 фиксируется здесь один раз за весь набор
+    + actual - expected
+    
+    + [
+    +   'GET /api/health',
+    +   'POST /api/groups/{gid}/participants',
+    +   'DELETE /api/groups/{gid}/participants/{pid}',
+    +   'GET /api/groups/{gid}/debts',
+    +   'POST /api/groups/{gid}/debts/{from}/{to}/pay',
+    +   'GET /api/groups/{gid}/transactions'
+    + ]
+    - []
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual:
+    0: 'GET /api/health'
+    1: 'POST /api/groups/{gid}/participants'
+    2: 'DELETE /api/groups/{gid}/participants/{pid}'
+    3: 'GET /api/groups/{gid}/debts'
+    4: 'POST /api/groups/{gid}/debts/{from}/{to}/pay'
+    5: 'GET /api/groups/{gid}/transactions'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-c.test.mjs:1030:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-32 · SP-005,SP-003: идентификаторы — строки, уникальные, не переиспользуются
+not ok 113 - C-32 · SP-005,SP-003: идентификаторы — строки, уникальные, не переиспользуются
+  ---
+  duration_ms: 287.118381
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-c.test.mjs:1041:1'
+  failureType: 'testCodeFailure'
+  error: 'SP-005: идентификатор удалённого участника не обязан выдаваться заново — иначе ссылки на старого участника начнут указывать на нового. Приложение отождествляет участника с учётной записью, поэтому после удаления и повторного добавления идентификатор тот же'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'usr_2ec8be7413e832bb1e'
+  actual: 'usr_2ec8be7413e832bb1e'
+  operator: 'notStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-c.test.mjs:1063:12)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-33 · SP-007: данные переживают перезапуск процесса, включая погашения
+ok 114 - C-33 · SP-007: данные переживают перезапуск процесса, включая погашения
+  ---
+  duration_ms: 557.213473
+  type: 'test'
+  ...
+# Subtest: C-34 · SP-180,SP-181: состав записи истории — расход и погашение в одном списке
+not ok 115 - C-34 · SP-180,SP-181: состав записи истории — расход и погашение в одном списке
+  ---
+  duration_ms: 136.722108
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-c.test.mjs:1126:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-181: запись истории обязана иметь СУММУ отдельным полем. У записи есть только человекочитаемый text («Аня добавил(а) расход «Бензин» на 300.00 RUB»), суммы, валюты и сторон операции полями нет — запись истории неразбираема программно
+    + actual - expected
+    
+    + undefined
+    - 30000
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 30000
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-c.test.mjs:1145:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-35 · SP-182,SP-056: порядок истории — от новых к старым, поимённо
+not ok 116 - C-35 · SP-182,SP-056: порядок истории — от новых к старым, поимённо
+  ---
+  duration_ms: 3450.577037
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-c.test.mjs:1157:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-056: список расходов обязан идти от старых к новым — противоположно порядку истории
+    + actual - expected
+    
+      [
+    +   'Третий',
+    +   'Второй',
+        'Первый',
+    -   'Второй',
+    -   'Третий'
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 'Первый'
+    1: 'Второй'
+    2: 'Третий'
+  actual:
+    0: 'Третий'
+    1: 'Второй'
+    2: 'Первый'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-c.test.mjs:1186:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-36 · SP-183,SP-058: удалённый расход исчезает из истории
+not ok 117 - C-36 · SP-183,SP-058: удалённый расход исчезает из истории
+  ---
+  duration_ms: 86.440789
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-c.test.mjs:1190:1'
+  failureType: 'testCodeFailure'
+  error: 'SP-183: удалённый расход обязан исчезать из истории — ни записью с пометкой, ни с нулевой суммой. В истории остались строки: Аня удалил(а) расход «Два» | Аня добавил(а) расход «Два» на 40.00 RUB'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-c.test.mjs:1212:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-37 · SP-184,SP-110: параметры фильтрации истории игнорируются, а не отвергаются
+not ok 118 - C-37 · SP-184,SP-110: параметры фильтрации истории игнорируются, а не отвергаются
+  ---
+  duration_ms: 133.218321
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-c.test.mjs:1226:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    SP-184,SP-110: фильтрация истории вне рамок итерации — переданные параметры обязаны игнорироваться. Приложение обслуживает limit (объявлен в app/README.md): ?unknown=да&limit=1&sort=asc → 1 записей вместо 3. Функционально это «больше, чем просили», но оракул выносит фильтрацию за рамки
+    + actual - expected
+    
+    + [
+    +   '?unknown=да&limit=1&sort=asc → 1 записей вместо 3'
+    + ]
+    - []
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual:
+    0: '?unknown=да&limit=1&sort=asc → 1 записей вместо 3'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-c.test.mjs:1244:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: C-38 · SP-180,SP-181,SP-182: сверка истории с балансами и долгами
+not ok 119 - C-38 · SP-180,SP-181,SP-182: сверка истории с балансами и долгами
+  ---
+  duration_ms: 134.930675
+  type: 'test'
+  location: '/home/claude/repo/tests/api/plan-c.test.mjs:1250:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Сверка 1: суммы записей истории обязаны совпадать со списком расходов один в один. У записей истории поля суммы нет — сверить историю со сводками программно нельзя
+    + actual - expected
+    
+      [
+    +   undefined,
+    +   undefined
+    -   6000,
+    -   30000
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 6000
+    1: 30000
+  actual:
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/claude/repo/tests/api/plan-c.test.mjs:1293:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..119
+# tests 119
+# suites 0
+# pass 56
+# fail 63
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 21195.158499
+# код возврата node --test: 1

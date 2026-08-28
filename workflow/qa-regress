@@ -1,0 +1,425 @@
+#!/usr/bin/env bash
+# qa-regress — повторяемая процедура регрессионного прогона SplitPay QA.
+#
+# Что делает: берёт изменения, накопившиеся от тега last-qa-run, сопоставляет
+# их с зонами A/B/C по разделам SPEC.md, прогоняет только затронутые зоны,
+# отдаёт результат на независимую проверку агенту, собирает отчёт и ставит
+# новый тег.
+#
+# Каждый шаг оставляет после себя файл в evidence/run-<дата>/. Файла нет —
+# шаг не выполнен; это то же правило, по которому в этом проекте живёт весь
+# остальной набор: кейс без зафиксированного вывода в сдачу не входит.
+#
+# Вызов:
+#   workflow/qa-regress run                 шаги 1–3 и подготовка задания агенту
+#   workflow/qa-regress finish              шаги 5–6, после того как агент положил вердикт
+#   workflow/qa-regress run --base <ref>    сравнивать не с тегом, а с указанной точкой
+#   workflow/qa-regress run --all           прогнать все зоны, минуя сопоставление
+#   workflow/qa-regress run --no-ui         пропустить UI-слой (нет Playwright)
+#
+# Шаг 4 намеренно разрывает процедуру на два вызова: между ними работает
+# отдельный агент с чистым контекстом. Агент, проверяющий отчёт, написанный
+# в том же контексте, проверяет собственные предположения — это запрет 3
+# из sessions/STATE.md.
+
+set -u -o pipefail
+
+REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$REPO" || exit 2
+
+TAG_NAME="last-qa-run"
+ZONES_MAP="$REPO/workflow/zones.map"
+DATE="$(date -u +%Y-%m-%d)"
+POINTER="$REPO/evidence/.last-run"
+OUT=""   # выбирается ниже: run у каждого вызова свой каталог, finish берёт последний
+
+die()  { echo "qa-regress: $*" >&2; exit 2; }
+say()  { echo "== $*"; }
+
+# --- Р-1: git на машине заказчика не имеет права удалять файлы. -------------
+# Мёртвые замки от прошлых операций уводятся в .git/_trash/ переименованием,
+# потому что переименование средой разрешено, а удаление — нет. Разбор:
+# REPORT.md, случай Р-1. Шаг read-only-операциям тоже нужен: git status
+# снимает замок удалением и без этого падает.
+unlock() {
+  local trash="$REPO/.git/_trash"
+  mkdir -p "$trash" 2>/dev/null
+  local moved=0 f
+  for f in "$REPO"/.git/*.lock "$REPO"/.git/objects/*.lock "$REPO"/.git/refs/tags/*.lock; do
+    [ -e "$f" ] || continue
+    mv "$f" "$trash/$(basename "$f").$(date +%s%N)" 2>/dev/null && moved=$((moved+1))
+  done
+  echo "$moved"
+}
+
+usage() { sed -n '2,30p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 2; }
+
+MODE="${1:-}"; shift 2>/dev/null || true
+BASE_OVERRIDE=""; FORCE_ALL=0; NO_UI=0
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --base) BASE_OVERRIDE="${2:-}"; shift 2 ;;
+    --all)  FORCE_ALL=1; shift ;;
+    --no-ui) NO_UI=1; shift ;;
+    *) die "неизвестный аргумент: $1" ;;
+  esac
+done
+
+# ===========================================================================
+# ШАГ 0. Контекст прогона
+# ===========================================================================
+step0_context() {
+  mkdir -p "$OUT" || die "не удалось создать $OUT"
+  local n; n="$(unlock)"
+  {
+    echo "# Контекст прогона qa-regress"
+    echo
+    echo "дата (UTC)      : $(date -u +'%Y-%m-%d %H:%M:%S')"
+    echo "репозиторий     : $REPO"
+    echo "HEAD            : $(git rev-parse --short HEAD 2>&1) $(git log -1 --pretty=%s 2>&1)"
+    echo "ветка           : $(git rev-parse --abbrev-ref HEAD 2>&1)"
+    echo "node            : $(node --version 2>&1)"
+    echo "git             : $(git --version 2>&1)"
+    echo "снято мёртвых замков (Р-1): $n"
+    echo -n "playwright      : "
+    if node -e "import('playwright').then(()=>process.exit(0)).catch(()=>process.exit(1))" 2>/dev/null; then
+      echo "доступен, UI-слой прогоняется"
+    else
+      echo "ОТСУТСТВУЕТ, UI-слой будет пропущен (реестр npm недоступен, риск Р-2)"
+    fi
+  } | tee "$OUT/00-context.txt"
+}
+
+# ===========================================================================
+# ШАГ 1. Изменения от тега last-qa-run
+# ===========================================================================
+step1_changes() {
+  local base
+  if [ -n "$BASE_OVERRIDE" ]; then
+    base="$BASE_OVERRIDE"
+    git rev-parse --verify -q "$base^{commit}" >/dev/null || die "точка сравнения не найдена: $base"
+    echo "точка сравнения задана вручную: $base" > "$OUT/01-base.txt"
+  elif git rev-parse --verify -q "refs/tags/$TAG_NAME" >/dev/null; then
+    base="$TAG_NAME"
+    echo "точка сравнения — тег $TAG_NAME ($(git rev-parse --short "$TAG_NAME"))" > "$OUT/01-base.txt"
+  else
+    base="$(git rev-list --max-parents=0 HEAD | tail -1)"
+    {
+      echo "точка сравнения — КОРНЕВОЙ КОММИТ $(git rev-parse --short "$base")"
+      echo
+      echo "Тега $TAG_NAME в репозитории нет: это первый прогон процедуры."
+      echo "Взята вся история, поэтому затронутыми окажутся все три зоны."
+      echo "Начиная со следующего прогона точкой сравнения будет тег,"
+      echo "который ставит шаг 6 этой же процедуры."
+    } > "$OUT/01-base.txt"
+  fi
+  echo "$base" > "$OUT/.base"
+
+  git diff --name-only "$base"..HEAD > "$OUT/01-changed-files.txt" 2>&1 \
+    || die "git diff не отработал, см. $OUT/01-changed-files.txt"
+  {
+    echo
+    echo "--- изменённых файлов: $(wc -l < "$OUT/01-changed-files.txt") ---"
+  } >> "$OUT/01-base.txt"
+  cat "$OUT/01-base.txt"
+  say "шаг 1: $OUT/01-changed-files.txt"
+}
+
+# ===========================================================================
+# ШАГ 2. Сопоставление изменений с зонами A/B/C
+# ===========================================================================
+step2_zones() {
+  local base; base="$(cat "$OUT/.base")"
+  [ -f "$ZONES_MAP" ] || die "нет таблицы зон: $ZONES_MAP"
+
+  # Разделы SPEC.md, задетые правкой: берутся из заголовков ханков git diff.
+  git diff -U0 "$base"..HEAD -- SPEC.md 2>/dev/null \
+    | grep -oE '^@@.*@@ ## [0-9]+\.' \
+    | grep -oE '## [0-9]+\.' | grep -oE '[0-9]+' | sort -un > "$OUT/.spec-sections"
+
+  : > "$OUT/.zones-raw"
+  {
+    echo "# Сопоставление изменений с зонами A/B/C"
+    echo "# правила — workflow/zones.map"
+    echo
+    printf '%-44s %-8s %s\n' "ЧТО ИЗМЕНИЛОСЬ" "ЗОНЫ" "ОСНОВАНИЕ"
+    printf '%.0s-' {1..110}; echo
+
+    while IFS= read -r f; do
+      [ -n "$f" ] || continue
+      local hit="" zones="" why=""
+      while IFS=$'\t' read -r kind key z reason; do
+        [ "$kind" = "path" ] || continue
+        case "$f" in "$key"*) if [ ${#key} -gt ${#hit} ]; then hit="$key"; zones="$z"; why="$reason"; fi ;; esac
+      done < <(grep -v '^#' "$ZONES_MAP" | grep -v '^$')
+      if [ -z "$hit" ]; then zones="A,B,C"; why="ключа в таблице нет — правило полноты"; fi
+      printf '%-44s %-8s %s\n' "$f" "$zones" "$why"
+      [ "$zones" != "-" ] && echo "$zones" | tr ',' '\n' >> "$OUT/.zones-raw"
+    done < "$OUT/01-changed-files.txt"
+
+    if [ -s "$OUT/.spec-sections" ]; then
+      echo
+      echo "Разделы SPEC.md, задетые правкой:"
+      while IFS= read -r s; do
+        local line z reason
+        line="$(awk -F'\t' -v s="$s" '$1=="spec" && $2==s {print; exit}' "$ZONES_MAP")"
+        if [ -n "$line" ]; then
+          z="$(echo "$line" | cut -f3)"; reason="$(echo "$line" | cut -f4)"
+        else
+          z="A,B,C"; reason="раздела нет в таблице — правило полноты"
+        fi
+        printf '  §%-4s %-8s %s\n' "$s" "$z" "$reason"
+        echo "$z" | tr ',' '\n' >> "$OUT/.zones-raw"
+      done < "$OUT/.spec-sections"
+    fi
+  } > "$OUT/02-zone-map.txt"
+
+  if [ "$FORCE_ALL" = 1 ]; then
+    printf 'A\nB\nC\n' > "$OUT/.zones"
+    echo >> "$OUT/02-zone-map.txt"
+    echo "ЗАПРОШЕН ПРОГОН ВСЕХ ЗОН (--all): сопоставление сделано, но не применено." >> "$OUT/02-zone-map.txt"
+  else
+    grep -E '^[ABC]$' "$OUT/.zones-raw" 2>/dev/null | sort -u > "$OUT/.zones"
+  fi
+
+  {
+    echo
+    if [ -s "$OUT/.zones" ]; then
+      echo "ЗАТРОНУТЫЕ ЗОНЫ: $(paste -sd, "$OUT/.zones")"
+    else
+      echo "ЗАТРОНУТЫХ ЗОН НЕТ: изменения не касаются поведения приложения."
+      echo "Прогон не нужен. Это результат, а не отказ процедуры."
+    fi
+  } >> "$OUT/02-zone-map.txt"
+  tail -6 "$OUT/02-zone-map.txt"
+  say "шаг 2: $OUT/02-zone-map.txt"
+}
+
+# ===========================================================================
+# ШАГ 3. Прогон затронутых зон
+# ===========================================================================
+step3_run() {
+  local zones; zones="$(paste -sd, "$OUT/.zones" 2>/dev/null)"
+  if [ -z "$zones" ]; then
+    echo "прогон не выполнялся: затронутых зон нет" > "$OUT/03-run-api.txt"
+    printf 'api\t0\t0\t0\nui\t0\t0\t0\n' > "$OUT/03-counts.tsv"
+    say "шаг 3: прогон не потребовался"
+    return
+  fi
+
+  local api_glob="" ui_glob=""
+  while IFS= read -r z; do
+    local low; low="$(echo "$z" | tr 'ABC' 'abc')"
+    api_glob="$api_glob tests/api/plan-$low.test.mjs"
+    ui_glob="$ui_glob tests/ui/plan-$low.spec.mjs"
+  done < "$OUT/.zones"
+
+  say "шаг 3: API, зоны $zones"
+  # shellcheck disable=SC2086
+  node --test $api_glob > "$OUT/03-run-api.txt" 2>&1
+  local api_code=$?
+  echo "# код возврата node --test: $api_code" >> "$OUT/03-run-api.txt"
+
+  local ui_ok=0
+  if [ "$NO_UI" = 1 ]; then
+    echo "UI-слой пропущен по ключу --no-ui" > "$OUT/03-run-ui.txt"
+  elif node -e "import('playwright').then(()=>process.exit(0)).catch(()=>process.exit(1))" 2>/dev/null; then
+    say "шаг 3: UI, зоны $zones"
+    # shellcheck disable=SC2086
+    node --test $ui_glob > "$OUT/03-run-ui.txt" 2>&1
+    echo "# код возврата node --test: $?" >> "$OUT/03-run-ui.txt"
+    ui_ok=1
+  else
+    {
+      echo "UI-слой НЕ ПРОГНАН: модуль playwright недоступен."
+      echo "Реестр npm закрыт из обеих сред (риск Р-2), поставить его на этой машине нельзя."
+      echo "UI-слой прогоняется в облачном контейнере: npm link playwright && node --test \"tests/ui/*.spec.mjs\""
+      echo "Это ограничение окружения, а не пропуск проверок."
+    } > "$OUT/03-run-ui.txt"
+  fi
+
+  count() { # <файл> -> "tests pass fail"
+    local f="$1"
+    [ -f "$f" ] || { echo "0 0 0"; return; }
+    local t p x
+    t="$(grep -m1 '^# tests '  "$f" | grep -oE '[0-9]+$')"; t="${t:-0}"
+    p="$(grep -m1 '^# pass '   "$f" | grep -oE '[0-9]+$')"; p="${p:-0}"
+    x="$(grep -m1 '^# fail '   "$f" | grep -oE '[0-9]+$')"; x="${x:-0}"
+    echo "$t $p $x"
+  }
+  read -r at ap af <<< "$(count "$OUT/03-run-api.txt")"
+  if [ "$ui_ok" = 1 ]; then read -r ut up uf <<< "$(count "$OUT/03-run-ui.txt")"; else ut=0; up=0; uf=0; fi
+  {
+    printf 'слой\tтестов\tзелёных\tкрасных\n'
+    printf 'api\t%s\t%s\t%s\n' "$at" "$ap" "$af"
+    printf 'ui\t%s\t%s\t%s\n'  "$ut" "$up" "$uf"
+    printf 'итого\t%s\t%s\t%s\n' "$((at+ut))" "$((ap+up))" "$((af+uf))"
+  } > "$OUT/03-counts.tsv"
+  cat "$OUT/03-counts.tsv"
+}
+
+# ===========================================================================
+# ШАГ 4. Задание независимому агенту
+# ===========================================================================
+step4_audit_task() {
+  local zones; zones="$(paste -sd, "$OUT/.zones" 2>/dev/null || echo '—')"
+  cat > "$OUT/04-audit-task.md" <<EOF
+# Задание независимому агенту: сверка «заявлено / фактически»
+
+Контекст читать не нужно и не следует. Работай только с перечисленными файлами.
+
+## Что проверить
+
+Процедура \`workflow/qa-regress\` утверждает следующее:
+
+- точка сравнения: см. \`evidence/$RUNID/01-base.txt\`
+- затронутые зоны: **$zones**
+- числа прогона: см. \`evidence/$RUNID/03-counts.tsv\`
+
+Твоя работа — сверить эти утверждения с сырыми выводами и найти расхождения.
+
+## Файлы
+
+| Файл | Что это |
+|---|---|
+| \`evidence/$RUNID/01-changed-files.txt\` | список изменённых файлов |
+| \`evidence/$RUNID/02-zone-map.txt\` | сопоставление с зонами |
+| \`workflow/zones.map\` | правила сопоставления |
+| \`evidence/$RUNID/03-run-api.txt\` | сырой вывод прогона API |
+| \`evidence/$RUNID/03-run-ui.txt\` | сырой вывод прогона UI |
+| \`evidence/$RUNID/03-counts.tsv\` | числа, которые процедура заявляет |
+
+## Вопросы, на которые нужен ответ
+
+1. Числа в \`03-counts.tsv\` совпадают со строками \`# tests\` / \`# pass\` / \`# fail\`
+   в сырых выводах? Назови расхождение цифрами.
+2. Сопоставление в \`02-zone-map.txt\` соответствует правилам \`zones.map\`?
+   Есть ли изменённый файл, которому зона назначена неверно или не назначена?
+3. Прогнаны ли фактически все зоны, объявленные затронутыми? Сверь по именам
+   файлов проверок в сыром выводе, а не по заголовку.
+4. Есть ли в сыром выводе признаки того, что прогон оборвался, а не завершился:
+   отсутствие итогового блока, ненулевой код возврата без строки \`# fail\`,
+   падение оснастки вместо падения теста?
+5. Заявлено ли где-нибудь пройденным то, что фактически не прогонялось?
+
+## Формат ответа
+
+Запиши файл \`evidence/$RUNID/04-audit-verdict.md\`:
+
+\`\`\`
+# Вердикт независимой сверки — $DATE
+
+**Расхождений: N**
+
+| № | Что заявлено | Что фактически | Где смотреть |
+|---|---|---|---|
+
+## Вывод
+ЧИСТО | ЕСТЬ РАСХОЖДЕНИЯ
+\`\`\`
+
+Расхождений нет — так и напиши, «ЧИСТО». Не правь ничего, кроме своего файла.
+EOF
+  say "шаг 4: задание агенту — $OUT/04-audit-task.md"
+  echo "   агент должен положить $OUT/04-audit-verdict.md, после чего: workflow/qa-regress finish"
+}
+
+# ===========================================================================
+# ШАГ 5. Сборка отчёта
+# ===========================================================================
+step5_report() {
+  [ -f "$OUT/04-audit-verdict.md" ] || die "нет вердикта агента: $OUT/04-audit-verdict.md — шаг 4 не закрыт"
+  local verdict; verdict="$(grep -oE 'ЧИСТО|ЕСТЬ РАСХОЖДЕНИЯ' "$OUT/04-audit-verdict.md" | tail -1)"
+  local zones; zones="$(paste -sd, "$OUT/.zones" 2>/dev/null || echo '—')"
+  {
+    echo "# Отчёт регрессионного прогона — $DATE"
+    echo
+    echo "Собран процедурой \`workflow/qa-regress\`. Все числа взяты из файлов этого"
+    echo "каталога, руками не переписаны."
+    echo
+    echo "## Что прогонялось"
+    echo
+    sed -n '1,20p' "$OUT/01-base.txt"
+    echo
+    echo "Затронутые зоны: **$zones**"
+    echo
+    echo "## Результат"
+    echo
+    echo '```'
+    cat "$OUT/03-counts.tsv"
+    echo '```'
+    echo
+    echo "## Независимая сверка «заявлено / фактически»"
+    echo
+    echo "Вердикт агента: **${verdict:-не распознан}**. Полностью — \`04-audit-verdict.md\`."
+    echo
+    echo "## Файлы-доказательства"
+    echo
+    echo "| Шаг | Файл |"
+    echo "|---|---|"
+    local f
+    for f in 00-context.txt 01-base.txt 01-changed-files.txt 02-zone-map.txt \
+             03-run-api.txt 03-run-ui.txt 03-counts.tsv 04-audit-task.md 04-audit-verdict.md; do
+      [ -f "$OUT/$f" ] && echo "| $(echo "$f" | cut -c1-2) | \`evidence/$RUNID/$f\` |"
+    done
+  } > "$OUT/05-report.md"
+  say "шаг 5: $OUT/05-report.md"
+}
+
+# ===========================================================================
+# ШАГ 6. Тег
+# ===========================================================================
+step6_tag() {
+  local n; n="$(unlock)"
+  local prev; prev="$(git rev-parse --short "$TAG_NAME" 2>/dev/null || echo 'нет')"
+  {
+    echo "# Перестановка тега $TAG_NAME"
+    echo
+    echo "снято мёртвых замков перед операцией (Р-1): $n"
+    echo "было : $prev"
+    echo "стало: $(git rev-parse --short HEAD)"
+    echo
+    echo "\$ git tag -f $TAG_NAME"
+    git tag -f "$TAG_NAME" 2>&1
+    echo "код возврата: $?"
+    echo
+    echo "\$ git tag -l -n1"
+    git tag -l -n1 2>&1
+    echo
+    echo "Тег локальный. На сервер он попадает отдельной командой владельца:"
+    echo "  git push --force origin $TAG_NAME"
+  } > "$OUT/06-tag.txt"
+  cat "$OUT/06-tag.txt"
+  say "шаг 6: $OUT/06-tag.txt"
+}
+
+# Каталог прогона. У каждого вызова `run` он свой: второй прогон в те же сутки
+# не затирает доказательства первого. `finish` работает с последним начатым.
+pick_out() {
+  if [ "$1" = "run" ]; then
+    RUNID="run-$DATE"; local i=2
+    while [ -e "$REPO/evidence/$RUNID" ]; do RUNID="run-$DATE.$i"; i=$((i+1)); done
+    OUT="$REPO/evidence/$RUNID"
+    mkdir -p "$REPO/evidence" 2>/dev/null
+    echo "$RUNID" > "$POINTER"
+  else
+    [ -f "$POINTER" ] || die "нет $POINTER — сначала workflow/qa-regress run"
+    RUNID="$(cat "$POINTER")"
+    OUT="$REPO/evidence/$RUNID"
+  fi
+}
+
+case "$MODE" in
+  run)
+    pick_out run
+    step0_context; step1_changes; step2_zones; step3_run; step4_audit_task
+    echo; say "шаги 1–4 закрыты. Каталог: evidence/$RUNID/"
+    ;;
+  finish)
+    pick_out finish
+    [ -d "$OUT" ] || die "каталога evidence/$RUNID нет — сначала workflow/qa-regress run"
+    step5_report; step6_tag
+    echo; say "шаги 5–6 закрыты. Отчёт: evidence/$RUNID/05-report.md"
+    ;;
+  *) usage ;;
+esac
